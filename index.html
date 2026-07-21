@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>reset.matcha — Homemade Matcha & Hojicha Lattes · Batu Kawan</title>
+<link rel="icon" type="image/png" href="reset-matcha-logo.png">
+<link rel="apple-touch-icon" href="reset-matcha-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --dark:#1c241a;
+    --dark-card:#243021;
+    --matcha-deep:#4f7a3f;
+    --matcha:#7bb661;
+    --matcha-bright:#9ede6c;
+    --matcha-pale:#eef4e6;
+    --cream:#f6f7f1;
+    --ink:#2a3123;
+    --muted:#6f7a63;
+    --gold:#e0b64a;
+    --radius:26px;
+    --shadow:0 18px 45px rgba(40,60,30,0.16);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Quicksand',sans-serif;color:var(--ink);background:var(--cream);overflow-x:hidden;}
+  h1,h2,h3,h4,.brand,.pill{font-family:'Poppins',sans-serif;}
+  a{text-decoration:none;color:inherit;}
+  img{display:block;max-width:100%;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 22px;}
+
+  /* Reusable photo box: shows matcha-photo if file exists, gradient fallback otherwise */
+  .photo{
+    background-size:cover;background-position:center;background-repeat:no-repeat;
+    background-color:#2c3a26;
+    background-image:linear-gradient(135deg, rgba(123,182,97,0.35), rgba(28,36,26,0.6));
+  }
+
+  /* NAV */
+  header{position:sticky;top:0;z-index:900;background:rgba(246,247,241,0.9);backdrop-filter:blur(12px);border-bottom:1px solid rgba(123,182,97,0.2);}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:14px 22px;max-width:1180px;margin:0 auto;}
+  .brand{font-size:23px;font-weight:800;color:var(--matcha-deep);display:flex;align-items:center;gap:9px;letter-spacing:-.5px;}
+  .brand-logo{width:40px;height:40px;border-radius:50%;object-fit:cover;box-shadow:0 2px 8px rgba(40,60,30,0.18);}
+  .hero-logo{width:128px;height:128px;border-radius:50%;object-fit:cover;margin:0 0 22px;box-shadow:0 10px 30px rgba(0,0,0,0.35);border:3px solid rgba(255,255,255,0.85);}
+  @media(max-width:780px){.hero-logo{margin:0 auto 22px;}}
+  footer .brand-logo{width:52px;height:52px;}
+  .nav-links{display:flex;gap:30px;list-style:none;font-weight:600;font-size:15px;align-items:center;}
+  .nav-links a{padding:6px 4px;position:relative;transition:color .2s;}
+  .nav-links a:hover{color:var(--matcha-deep);}
+  .nav-links a::after{content:'';position:absolute;left:0;bottom:0;height:2px;width:0;background:var(--gold);transition:width .25s;}
+  .nav-links a:hover::after{width:100%;}
+  .nav-cta{background:var(--matcha-deep);color:#fff !important;padding:10px 22px;border-radius:30px;box-shadow:var(--shadow);transition:transform .2s,background .2s;}
+  .nav-cta:hover{background:var(--matcha);transform:translateY(-2px);}
+  .nav-cta::after{display:none;}
+  .hamburger{display:none;background:none;border:none;font-size:26px;color:var(--matcha-deep);cursor:pointer;}
+
+  /* HERO */
+  .hero{padding:40px 0 30px;}
+  .hero-card{
+    position:relative;border-radius:34px;overflow:hidden;min-height:520px;display:flex;align-items:center;
+    background-image:linear-gradient(90deg, rgba(20,28,18,0.92) 0%, rgba(20,28,18,0.72) 42%, rgba(20,28,18,0.15) 70%, rgba(20,28,18,0.05) 100%), var(--hero-img);
+    background-size:cover;background-position:center right;background-color:#1c241a;
+    box-shadow:var(--shadow);
+  }
+  .hero-inner{padding:60px;max-width:640px;color:#fff;z-index:2;}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(158,222,108,0.18);color:var(--matcha-bright);border:1px solid rgba(158,222,108,0.4);padding:7px 16px;border-radius:30px;font-weight:700;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:24px;}
+  .hero h1{font-size:clamp(36px,5.4vw,62px);font-weight:900;line-height:1.08;letter-spacing:-1px;margin-bottom:20px;}
+  .hero h1 span{color:var(--matcha-bright);}
+  .hero p{font-size:17px;line-height:1.6;color:rgba(255,255,255,0.82);margin-bottom:34px;max-width:460px;}
+  .btn{display:inline-flex;align-items:center;gap:9px;padding:15px 30px;border-radius:34px;font-weight:700;font-size:15px;font-family:'Poppins';transition:transform .25s,box-shadow .25s,background .25s;cursor:pointer;}
+  .btn-primary{background:var(--matcha-bright);color:var(--dark);box-shadow:0 12px 26px rgba(158,222,108,0.35);}
+  .btn-primary:hover{transform:translateY(-3px);background:#b0f083;}
+  .btn-ghost{background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.3);}
+  .btn-ghost:hover{background:rgba(255,255,255,0.22);transform:translateY(-3px);}
+  .hero-btns{display:flex;gap:14px;flex-wrap:wrap;}
+  .hero-stats{display:flex;gap:34px;margin-top:38px;}
+  .hero-stats div{color:#fff;}
+  .hero-stats b{display:block;font-family:'Poppins';font-size:26px;font-weight:800;color:var(--matcha-bright);}
+  .hero-stats span{font-size:13px;color:rgba(255,255,255,0.7);}
+
+  /* PROMO STRIP */
+  .promo{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin:60px 0;}
+  .promo-photo{border-radius:var(--radius);min-height:340px;box-shadow:var(--shadow);}
+  .promo-text{background:var(--matcha-deep);border-radius:var(--radius);padding:52px;color:#fff;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+  .promo-text::after{content:'🍵';position:absolute;right:-10px;bottom:-20px;font-size:150px;opacity:0.12;}
+  .promo-text h2{font-size:clamp(26px,3.4vw,38px);font-weight:800;line-height:1.15;margin-bottom:16px;}
+  .promo-text p{color:rgba(255,255,255,0.85);line-height:1.65;margin-bottom:26px;max-width:400px;}
+  .promo-text .btn-primary{align-self:flex-start;}
+
+  /* SECTION HEAD */
+  section{padding:30px 0;}
+  .head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:34px;gap:20px;flex-wrap:wrap;}
+  .head h2{font-size:clamp(26px,3.6vw,40px);font-weight:800;color:var(--ink);line-height:1.1;letter-spacing:-.5px;}
+  .head .tag{color:var(--matcha-deep);font-weight:700;letter-spacing:2px;text-transform:uppercase;font-size:12px;margin-bottom:8px;display:block;}
+  .filters{display:flex;gap:10px;flex-wrap:wrap;}
+  .pill{border:1.5px solid var(--matcha);color:var(--matcha-deep);background:transparent;padding:8px 18px;border-radius:24px;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;font-family:'Quicksand';}
+  .pill.active,.pill:hover{background:var(--matcha-deep);color:#fff;border-color:var(--matcha-deep);}
+
+  /* MENU GRID */
+  .menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .card{background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:0 10px 30px rgba(40,60,30,0.08);transition:transform .3s,box-shadow .3s;display:flex;flex-direction:column;}
+  .card:hover{transform:translateY(-8px);box-shadow:var(--shadow);}
+  .card .cardphoto{height:190px;position:relative;}
+  .card .cardtag{position:absolute;top:14px;left:14px;background:rgba(255,255,255,0.92);color:var(--matcha-deep);font-size:11px;font-weight:800;padding:5px 12px;border-radius:14px;letter-spacing:.5px;text-transform:uppercase;font-family:'Poppins';}
+  .card-body{padding:22px;display:flex;flex-direction:column;flex:1;}
+  .card-body h3{font-size:19px;font-weight:700;color:var(--ink);margin-bottom:8px;}
+  .card-body .desc{font-size:13.5px;color:var(--muted);line-height:1.55;margin-bottom:16px;flex:1;}
+  .milk{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+  .milk label{cursor:pointer;}
+  .milk input{display:none;}
+  .milk span{display:inline-block;border:1.5px solid var(--matcha);color:var(--matcha-deep);padding:6px 13px;border-radius:18px;font-size:12px;font-weight:700;transition:all .2s;}
+  .milk input:checked + span{background:var(--matcha-deep);color:#fff;}
+  .card-foot{display:flex;align-items:center;justify-content:space-between;}
+  .price{font-size:20px;font-weight:800;color:var(--matcha-deep);font-family:'Poppins';}
+  .price small{font-size:11px;color:#b0b5a5;font-weight:600;}
+  .order-btn{background:var(--matcha-bright);color:var(--dark);padding:9px 18px;border-radius:20px;font-weight:800;font-size:13px;font-family:'Poppins';transition:background .2s;}
+  .order-btn:hover{background:var(--matcha);color:#fff;}
+  .order-note{margin-top:26px;text-align:center;background:var(--matcha-pale);border:2px dashed var(--matcha);border-radius:18px;padding:14px 22px;color:var(--matcha-deep);font-weight:700;font-size:14px;}
+
+  /* MOTIVATION BAND */
+  .motiv{
+    position:relative;min-height:360px;display:flex;align-items:center;justify-content:center;text-align:center;
+    margin-top:60px;
+    background-image:linear-gradient(rgba(20,28,18,0.72),rgba(20,28,18,0.82)), var(--motiv-img);
+    background-size:cover;background-position:center;background-attachment:fixed;background-color:#1c241a;
+  }
+  .motiv-inner{max-width:760px;padding:60px 28px;color:#fff;}
+  .motiv-tag{display:inline-block;color:var(--matcha-bright);font-family:'Poppins';font-weight:700;letter-spacing:2px;text-transform:uppercase;font-size:12px;margin-bottom:20px;}
+  .motiv blockquote{font-family:'Poppins';font-size:clamp(22px,3.4vw,34px);font-weight:700;line-height:1.4;letter-spacing:-.5px;margin-bottom:18px;}
+  .motiv p{font-size:17px;color:var(--matcha-bright);font-weight:600;}
+
+  /* GALLERY */
+  .gallery-sec{background:var(--dark);padding:80px 0;margin-top:0;color:#fff;}
+  .gallery-sec .head h2{color:#fff;}
+  .gallery-sec .head .tag{color:var(--matcha-bright);}
+  .gallery-sec .head p{color:rgba(255,255,255,0.6);font-size:15px;max-width:420px;}
+  .gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+  .gallery .photo{border-radius:20px;aspect-ratio:3/4;transition:transform .3s;box-shadow:0 12px 26px rgba(0,0,0,0.3);}
+  .gallery .photo:hover{transform:scale(1.04);}
+
+  /* DELIVERY */
+  .delivery-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:10px;}
+  .dcard{background:#fff;border-radius:var(--radius);padding:38px;box-shadow:0 10px 30px rgba(40,60,30,0.08);border-top:5px solid var(--matcha);text-align:center;transition:transform .3s;}
+  .dcard:hover{transform:translateY(-6px);}
+  .dcard .icon{font-size:46px;margin-bottom:14px;}
+  .dcard h3{font-size:20px;color:var(--matcha-deep);margin-bottom:10px;font-weight:700;}
+  .dcard p{color:var(--muted);line-height:1.6;font-size:15px;}
+  .area{text-align:center;margin-top:30px;}
+  .area span{background:var(--matcha-pale);color:var(--matcha-deep);font-weight:700;padding:12px 26px;border-radius:22px;font-size:14px;display:inline-block;}
+
+  /* CTA */
+  .cta{margin:70px auto;max-width:1136px;background:linear-gradient(135deg,var(--matcha-deep),var(--matcha));border-radius:34px;padding:64px 40px;text-align:center;color:#fff;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+  .cta::before{content:'🌿';position:absolute;left:20px;top:20px;font-size:80px;opacity:.12;}
+  .cta::after{content:'🍵';position:absolute;right:20px;bottom:10px;font-size:100px;opacity:.12;}
+  .cta h2{font-size:clamp(26px,4vw,40px);font-weight:900;margin-bottom:14px;}
+  .cta p{max-width:520px;margin:0 auto 30px;line-height:1.65;opacity:.92;}
+  .cta .btn-primary{background:#fff;color:var(--matcha-deep);}
+  .cta .btn-primary:hover{background:var(--gold);color:#fff;}
+  .steps{display:flex;justify-content:center;gap:40px;margin-top:44px;flex-wrap:wrap;text-align:left;}
+  .step{max-width:210px;}
+  .step .n{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.22);display:flex;align-items:center;justify-content:center;font-weight:800;font-family:'Poppins';margin-bottom:10px;}
+  .step p{font-size:13.5px;opacity:.9;margin:0;}
+
+  /* FOOTER */
+  footer{padding:50px 22px 34px;text-align:center;color:var(--muted);font-size:14px;}
+  footer .brand{justify-content:center;margin-bottom:10px;font-size:22px;}
+  footer a{color:var(--matcha-deep);font-weight:700;}
+  footer .fnote{margin-top:8px;opacity:.65;}
+
+  /* ORDER FORM */
+  .order-sec{background:var(--dark);padding:80px 0;color:#fff;}
+  .order-sec .head{flex-direction:column;align-items:center;text-align:center;}
+  .order-sec .head h2{color:#fff;}
+  .order-sec .head .tag{color:var(--matcha-bright);}
+  .order-sec .lead{color:rgba(255,255,255,0.6);max-width:520px;margin:0 auto 40px;text-align:center;line-height:1.6;font-size:15px;}
+  .order-form{max-width:640px;margin:0 auto;background:rgba(255,255,255,0.04);border:1px solid rgba(158,222,108,0.18);border-radius:26px;padding:38px;}
+  .frow{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;}
+  .field{display:flex;flex-direction:column;gap:7px;}
+  .field.full{grid-column:1/-1;}
+  .field label{font-size:13px;font-weight:700;color:var(--matcha-bright);font-family:'Poppins';letter-spacing:.3px;}
+  .field label .req{color:var(--gold);}
+  .field input,.field select,.field textarea{
+    background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:12px;
+    padding:12px 14px;color:#fff;font-family:'Quicksand';font-size:15px;font-weight:600;outline:none;transition:border .2s;width:100%;
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--matcha-bright);}
+  .field select option{background:#1c241a;color:#fff;}
+  .field input::placeholder,.field textarea::placeholder{color:rgba(255,255,255,0.35);}
+  .field input[type="date"]{color-scheme:dark;}
+  .field textarea{resize:vertical;min-height:66px;}
+  .methods{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;}
+  .method{position:relative;cursor:pointer;display:block;}
+  .method input{position:absolute;opacity:0;pointer-events:none;}
+  .method .box{display:flex;flex-direction:column;align-items:center;justify-content:center;border:1.5px solid rgba(255,255,255,0.2);border-radius:16px;padding:18px;text-align:center;transition:all .2s;height:100%;}
+  .method .box .mi{font-size:30px;display:block;margin-bottom:6px;}
+  .method .box b{display:block;font-family:'Poppins';font-size:15px;margin-bottom:2px;}
+  .method .box small{color:rgba(255,255,255,0.55);font-size:12px;}
+  .method input:checked + .box{border-color:var(--matcha-bright);background:rgba(158,222,108,0.1);}
+  .confirm-note{display:flex;gap:10px;align-items:flex-start;background:rgba(224,182,74,0.1);border:1px solid rgba(224,182,74,0.3);border-radius:14px;padding:14px 16px;margin-bottom:22px;font-size:13.5px;color:#f0e6cf;line-height:1.5;}
+  .confirm-note b{color:var(--gold);}
+  .submit-btn{width:100%;background:var(--matcha-bright);color:var(--dark);border:none;padding:16px;border-radius:16px;font-family:'Poppins';font-weight:800;font-size:16px;cursor:pointer;transition:background .2s,transform .2s;display:flex;align-items:center;justify-content:center;gap:9px;}
+  .submit-btn:hover{background:#b0f083;transform:translateY(-2px);}
+  .order-result{display:none;margin-top:22px;background:rgba(158,222,108,0.08);border:1px dashed var(--matcha-bright);border-radius:16px;padding:20px;}
+  .order-result.show{display:block;}
+  .order-result h4{font-family:'Poppins';color:var(--matcha-bright);margin-bottom:10px;font-size:15px;}
+  .order-result textarea{width:100%;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.15);border-radius:12px;color:#fff;padding:14px;font-family:'Quicksand';font-size:14px;line-height:1.6;min-height:150px;resize:vertical;}
+  .result-actions{display:flex;gap:12px;margin-top:14px;flex-wrap:wrap;}
+  .result-actions a,.result-actions button{flex:1;min-width:150px;text-align:center;padding:13px;border-radius:14px;font-family:'Poppins';font-weight:700;font-size:14px;cursor:pointer;border:none;transition:all .2s;}
+  .btn-ig{background:var(--gold);color:#1c241a;}
+  .btn-ig:hover{background:#eac668;}
+  .btn-copy{background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2) !important;}
+  .btn-copy:hover{background:rgba(255,255,255,0.18);}
+  .err{color:#ffb4a8;font-size:13px;margin-top:10px;text-align:center;display:none;}
+  .err.show{display:block;}
+
+  @media(max-width:900px){
+    .menu-grid{grid-template-columns:repeat(2,1fr);}
+    .gallery{grid-template-columns:repeat(2,1fr);}
+    .promo,.delivery-grid{grid-template-columns:1fr;}
+    .hero-inner{padding:44px 30px;}
+    .hero-card{background-image:linear-gradient(180deg, rgba(20,28,18,0.55), rgba(20,28,18,0.9)), var(--hero-img);background-position:center;}
+  }
+  @media(max-width:640px){
+    .nav-links{position:fixed;inset:64px 0 auto 0;background:var(--cream);flex-direction:column;padding:22px;gap:16px;transform:translateY(-160%);transition:transform .3s;box-shadow:0 12px 20px rgba(0,0,0,.08);}
+    .nav-links.open{transform:translateY(0);}
+    .hamburger{display:block;}
+    .menu-grid{grid-template-columns:1fr;}
+    .promo-text,.cta{padding:38px 26px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="brand"><img src="reset-matcha-logo.png" alt="reset.matcha logo" class="brand-logo"> reset.matcha</div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#delivery">Delivery</a></li>
+      <li><a href="#order" class="nav-cta">Order Now</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger">☰</button>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="wrap">
+    <div class="hero-card" style="--hero-img:url('hero.jpeg');">
+      <div class="hero-inner">
+        <img src="reset-matcha-logo.png" alt="reset.matcha" class="hero-logo">
+        <span class="eyebrow">🍃 Homemade by the 00 Generation · Batu Kawan</span>
+        <h1>Worked hard today?<br><span>You've earned this cup.</span></h1>
+        <p>Homemade matcha & hojicha lattes for students grinding through the books and everyone who gave it their all today. One whisked cup to reset, refuel, and start fresh. 加油 — you've got this. 💪</p>
+        <div class="hero-btns">
+          <a href="#menu" class="btn btn-primary">🍵 Treat Yourself</a>
+          <a href="#order" class="btn btn-ghost">💬 Order on Instagram</a>
+        </div>
+        <div class="hero-stats">
+          <div><b>00后</b><span>Homemade with heart</span></div>
+          <div><b>Fresh</b><span>Made to order</span></div>
+          <div><b>Batu Kawan</b><span>Delivery area</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROMO -->
+<section>
+  <div class="wrap">
+    <div class="promo">
+      <div class="promo-photo photo" style="background-image:linear-gradient(135deg, rgba(123,182,97,0.25), rgba(28,36,26,0.55)), url('flatlay.jpg');"></div>
+      <div class="promo-text">
+        <h2>Made by us, for the daily grind.</h2>
+        <p>We're the 00 generation whisking matcha from our own kitchen — for late-night study sessions, back-to-back classes, and long work days. A little homemade reward that says: you showed up, and that matters.</p>
+        <a href="#menu" class="btn btn-primary">See What's Brewing</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <span class="tag">Our Menu</span>
+        <h2>Best sips we make</h2>
+      </div>
+      <div class="filters">
+        <button class="pill active">All</button>
+        <button class="pill">Matcha</button>
+        <button class="pill">Hojicha</button>
+        <button class="pill">Iced</button>
+      </div>
+    </div>
+
+    <div class="menu-grid">
+      <!-- Card 1 -->
+      <div class="card">
+        <div class="cardphoto photo" style="background-image:url('iced-flower.avif');">
+          <span class="cardtag">Best Seller</span>
+        </div>
+        <div class="card-body">
+          <h3>Matcha Latte</h3>
+          <p class="desc">Ceremonial-grade matcha whisked smooth with your choice of milk. Hot or iced.</p>
+          <div class="milk">
+            <label><input type="radio" name="m1" value="Low-fat Milk" checked><span>Low-fat Milk</span></label>
+            <label><input type="radio" name="m1" value="Oat Milk"><span>Oat Milk</span></label>
+          </div>
+          <div class="card-foot">
+            <div class="price">RM –.–<small> TBC</small></div>
+            <a href="#order" class="order-btn" onclick="setOrder('Matcha Latte','m1')">Order</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="card">
+        <div class="cardphoto photo" style="background-image:url('iced-closeup.jpeg');">
+          <span class="cardtag">Iced Fav</span>
+        </div>
+        <div class="card-body">
+          <h3>Iced Matcha Latte</h3>
+          <p class="desc">Chilled over ice and topped with a soft milk layer — refreshing and smooth for hot days.</p>
+          <div class="milk">
+            <label><input type="radio" name="m2" value="Low-fat Milk" checked><span>Low-fat Milk</span></label>
+            <label><input type="radio" name="m2" value="Oat Milk"><span>Oat Milk</span></label>
+          </div>
+          <div class="card-foot">
+            <div class="price">RM –.–<small> TBC</small></div>
+            <a href="#order" class="order-btn" onclick="setOrder('Iced Matcha Latte','m2')">Order</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="card">
+        <div class="cardphoto photo" style="background-image:url('whisk-editorial.jpeg');">
+          <span class="cardtag">Homemade</span>
+        </div>
+        <div class="card-body">
+          <h3>Hojicha Latte</h3>
+          <p class="desc">Roasted hojicha with a warm, toasty flavour, whisked with your choice of milk. Hot or iced.</p>
+          <div class="milk">
+            <label><input type="radio" name="m3" value="Low-fat Milk" checked><span>Low-fat Milk</span></label>
+            <label><input type="radio" name="m3" value="Oat Milk"><span>Oat Milk</span></label>
+          </div>
+          <div class="card-foot">
+            <div class="price">RM –.–<small> TBC</small></div>
+            <a href="#order" class="order-btn" onclick="setOrder('Hojicha Latte','m3')">Order</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="order-note" id="orderNote">🍃 Tap "Order" on a drink to build your Instagram order note.</div>
+  </div>
+</section>
+
+<!-- MOTIVATION BAND -->
+<section class="motiv" style="--motiv-img:url('hero.jpeg');">
+  <div class="motiv-inner">
+    <span class="motiv-tag">A little daily reminder</span>
+    <blockquote>"You studied hard. You worked hard. Now slow down for one cup — then go again tomorrow." 🌱</blockquote>
+    <p>加油，你今天已经很棒了。</p>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery-sec" id="gallery">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <span class="tag">Fresh from the whisk</span>
+        <h2>The matcha gallery</h2>
+      </div>
+      <p>Every cup is whisked by hand and made only after you order — this is what yours could look like.</p>
+    </div>
+    <div class="gallery">
+      <div class="photo" style="background-image:url('iced-flower.avif');"></div>
+      <div class="photo" style="background-image:url('flatlay.jpg');"></div>
+      <div class="photo" style="background-image:url('iced-closeup.jpeg');"></div>
+      <div class="photo" style="background-image:url('whisk-editorial.jpeg');"></div>
+    </div>
+  </div>
+</section>
+
+<!-- DELIVERY -->
+<section id="delivery">
+  <div class="wrap">
+    <div class="head" style="justify-content:center;text-align:center;flex-direction:column;align-items:center;">
+      <span class="tag">Getting Your Order</span>
+      <h2>Delivery &amp; Meetup</h2>
+    </div>
+    <div class="delivery-grid">
+      <div class="dcard">
+        <div class="icon">🛵</div>
+        <h3>Lalamove Delivery</h3>
+        <p>We arrange a Lalamove rider to bring your order to you within Batu Kawan. Delivery fee is paid by the customer via the Lalamove app.</p>
+      </div>
+      <div class="dcard">
+        <div class="icon">🤝</div>
+        <h3>面交 Meetup</h3>
+        <p>Prefer to meet in person? We can arrange a convenient meetup spot around Batu Kawan — just tell us your preferred time and place in a DM.</p>
+      </div>
+    </div>
+    <div class="area"><span>📍 Delivery &amp; meetup limited to the Batu Kawan area only</span></div>
+  </div>
+</section>
+
+<!-- ORDER FORM -->
+<section class="order-sec" id="order">
+  <div class="wrap">
+    <div class="head">
+      <span class="tag">Place Your Order</span>
+      <h2>Book your reset 🍵</h2>
+    </div>
+    <p class="lead">Fill in your order below, pick a date, and choose how you'd like to receive it. We'll message you on Instagram to confirm your exact delivery or meetup time.</p>
+
+    <form class="order-form" id="orderForm" onsubmit="return submitOrder(event)">
+      <div class="frow">
+        <div class="field">
+          <label>Drink <span class="req">*</span></label>
+          <select id="f_drink" required>
+            <option value="">Choose a drink…</option>
+            <option>Matcha Latte</option>
+            <option>Iced Matcha Latte</option>
+            <option>Hojicha Latte</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Milk <span class="req">*</span></label>
+          <select id="f_milk" required>
+            <option value="">Choose milk…</option>
+            <option>Low-fat Milk</option>
+            <option>Oat Milk</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="frow">
+        <div class="field">
+          <label>Quantity <span class="req">*</span></label>
+          <input type="number" id="f_qty" min="1" value="1" required>
+        </div>
+        <div class="field">
+          <label>Preferred date <span class="req">*</span></label>
+          <input type="date" id="f_date" required>
+        </div>
+      </div>
+
+      <div class="field full" style="margin-bottom:18px;">
+        <label>Extra items / notes <span style="color:rgba(255,255,255,0.4);font-weight:600;">(optional)</span></label>
+        <textarea id="f_notes" placeholder="e.g. 1 more Hojicha with oat milk, less ice, no sugar…"></textarea>
+      </div>
+
+      <label style="font-size:13px;font-weight:700;color:var(--matcha-bright);font-family:'Poppins';display:block;margin-bottom:10px;">How would you like it? <span class="req" style="color:var(--gold);">*</span></label>
+      <div class="methods">
+        <label class="method">
+          <input type="radio" name="method" value="Lalamove Delivery" checked onchange="toggleMethod()">
+          <span class="box"><span class="mi">🛵</span><b>Lalamove Delivery</b><small>Within Batu Kawan · fee paid by you</small></span>
+        </label>
+        <label class="method">
+          <input type="radio" name="method" value="面交 Face-to-face" onchange="toggleMethod()">
+          <span class="box"><span class="mi">🤝</span><b>面交 Meetup</b><small>Meet around Batu Kawan</small></span>
+        </label>
+      </div>
+
+      <div class="field full" id="addrField" style="margin-bottom:18px;">
+        <label id="addrLabel">Delivery address <span class="req">*</span></label>
+        <textarea id="f_addr" placeholder="Your delivery address in Batu Kawan" required></textarea>
+      </div>
+
+      <div class="frow">
+        <div class="field">
+          <label>Your name <span class="req">*</span></label>
+          <input type="text" id="f_name" placeholder="Name for the order" required>
+        </div>
+        <div class="field">
+          <label>Contact / IG handle <span style="color:rgba(255,255,255,0.4);font-weight:600;">(optional)</span></label>
+          <input type="text" id="f_contact" placeholder="@yourname or phone">
+        </div>
+      </div>
+
+      <div class="confirm-note" style="margin-top:4px;">
+        <span>ℹ️</span>
+        <div><b>Time is confirmed after ordering.</b> We'll reply on Instagram to confirm your exact delivery / 面交 handover time before we whisk your order. Earliest date is tomorrow. 🍃</div>
+      </div>
+
+      <button type="submit" class="submit-btn">📩 Send order &amp; open Instagram</button>
+      <div class="err" id="formErr">Please fill in all required fields ✱</div>
+
+      <div class="order-result" id="orderResult">
+        <h4>✅ Order ready! It's been copied — paste it in our Instagram DM 👇</h4>
+        <textarea id="orderSummary" readonly></textarea>
+        <div class="result-actions">
+          <a href="https://instagram.com/reset.matcha" target="_blank" class="btn-ig" id="igLink">📩 Open Instagram</a>
+          <button type="button" class="btn-copy" onclick="copyAgain()">📋 Copy again</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="brand" style="justify-content:center;"><img src="reset-matcha-logo.png" alt="reset.matcha" class="brand-logo"> reset.matcha</div>
+  <div>Homemade by the 00 generation in Batu Kawan · Instagram: <a href="https://instagram.com/reset.matcha" target="_blank">@reset.matcha</a></div>
+  <div class="fnote">© 2026 MatchaKawan · Whisked with heart, for everyone working hard. 加油 💪</div>
+</footer>
+
+<script>
+  const hamburger=document.getElementById('hamburger');
+  const navLinks=document.getElementById('navLinks');
+  hamburger.addEventListener('click',()=>navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>navLinks.classList.remove('open')));
+
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.style.opacity=1;e.target.style.transform='none';io.unobserve(e.target);}})},{threshold:0.12});
+  document.querySelectorAll('.card,.dcard,.promo-text,.promo-photo').forEach(el=>{el.style.opacity=0;el.style.transform='translateY(26px)';el.style.transition='opacity .6s ease, transform .6s ease';io.observe(el);});
+
+  // filter pills (visual only)
+  document.querySelectorAll('.pill').forEach(p=>p.addEventListener('click',()=>{
+    document.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));
+    p.classList.add('active');
+  }));
+
+  function setOrder(drink,group){
+    const milk=document.querySelector(`input[name="${group}"]:checked`).value;
+    document.getElementById('orderNote').textContent=`🍃 Your pick: ${drink} + ${milk} — scroll down to the order form to book it!`;
+    document.getElementById('order').scrollIntoView({behavior:'smooth'});
+    const ds=document.getElementById('f_drink');
+    if([...ds.options].some(o=>o.value===drink)) ds.value=drink;
+    document.getElementById('f_milk').value=milk;
+  }
+
+  // ---- ORDER FORM ----
+  const IG_URL='https://instagram.com/reset.matcha'; // <-- change to your real Instagram
+
+  // earliest selectable date = tomorrow
+  (function(){
+    const d=new Date(); d.setDate(d.getDate()+1);
+    const min=d.toISOString().split('T')[0];
+    const el=document.getElementById('f_date');
+    if(el){el.min=min; el.value=min;}
+  })();
+
+  function toggleMethod(){
+    const m=document.querySelector('input[name="method"]:checked').value;
+    const lbl=document.getElementById('addrLabel');
+    const inp=document.getElementById('f_addr');
+    if(m.indexOf('Lalamove')>-1){
+      lbl.innerHTML='Delivery address <span class="req">*</span>';
+      inp.placeholder='Your delivery address in Batu Kawan';
+    }else{
+      lbl.innerHTML='Preferred meetup area <span class="req">*</span>';
+      inp.placeholder='e.g. near Batu Kawan mall / your preferred spot';
+    }
+  }
+
+  function fmtDate(v){
+    try{const d=new Date(v+'T00:00:00');
+      return d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+    }catch(e){return v;}
+  }
+
+  function buildSummary(){
+    const g=id=>document.getElementById(id).value.trim();
+    const method=document.querySelector('input[name="method"]:checked').value;
+    const addrLabel=method.indexOf('Lalamove')>-1?'Delivery address':'Preferred meetup area';
+    let s='🍵 reset.matcha — New Order\n';
+    s+='─────────────────\n';
+    s+='• Drink: '+g('f_drink')+'\n';
+    s+='• Milk: '+g('f_milk')+'\n';
+    s+='• Quantity: '+g('f_qty')+'\n';
+    if(g('f_notes')) s+='• Extra / notes: '+g('f_notes')+'\n';
+    s+='─────────────────\n';
+    s+='• Receive by: '+method+'\n';
+    s+='• '+addrLabel+': '+g('f_addr')+'\n';
+    s+='• Preferred date: '+fmtDate(g('f_date'))+'\n';
+    s+='─────────────────\n';
+    s+='• Name: '+g('f_name')+'\n';
+    if(g('f_contact')) s+='• Contact: '+g('f_contact')+'\n';
+    s+='\nPlease confirm my delivery / 面交 handover time 🙏 加油!';
+    return s;
+  }
+
+  function submitOrder(e){
+    e.preventDefault();
+    const form=document.getElementById('orderForm');
+    const err=document.getElementById('formErr');
+    if(!form.checkValidity()){ err.classList.add('show'); form.reportValidity(); return false; }
+    err.classList.remove('show');
+    const summary=buildSummary();
+    document.getElementById('orderSummary').value=summary;
+    document.getElementById('orderResult').classList.add('show');
+    document.getElementById('igLink').href=IG_URL;
+    // copy to clipboard
+    navigator.clipboard&&navigator.clipboard.writeText(summary).catch(()=>{});
+    // open Instagram automatically
+    window.open(IG_URL,'_blank');
+    document.getElementById('orderResult').scrollIntoView({behavior:'smooth',block:'center'});
+    return false;
+  }
+
+  function copyAgain(){
+    const ta=document.getElementById('orderSummary');
+    ta.select();
+    navigator.clipboard?navigator.clipboard.writeText(ta.value):document.execCommand('copy');
+  }
+</script>
+
+</body>
+</html>

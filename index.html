@@ -284,6 +284,17 @@
   .bcard p{color:rgba(233,238,222,0.78);line-height:1.6;font-size:14.5px;}
   .matcha-note{text-align:center;margin-top:26px;font-size:12px;color:rgba(233,238,222,0.4);}
   @media(max-width:900px){.benefit-grid{grid-template-columns:1fr;}}
+
+  /* ===== LIGHT-GREEN SECTION BANDS ===== */
+  .light-sec{background:linear-gradient(180deg,#eef4e6 0%,#dcebca 100%);padding:74px 0;color:var(--ink);position:relative;z-index:1;}
+  .light-sec .head h2{color:#28301f;}
+  .light-sec .head .tag{color:var(--matcha-deep);}
+  .light-sec .pill{color:var(--matcha-deep);border-color:var(--matcha);}
+  .light-sec .pill.active,.light-sec .pill:hover{background:var(--matcha-deep);color:#fff;border-color:var(--matcha-deep);}
+  .light-sec .card{box-shadow:0 14px 30px rgba(40,60,30,0.14);}
+  .light-sec .order-note{background:#fff;color:var(--matcha-deep);border-color:var(--matcha);}
+  .light-sec .area span{background:#fff;box-shadow:0 4px 14px rgba(40,60,30,0.1);}
+  .light-sec .dcard{border-top-color:var(--matcha-deep);}
 </style>
 </head>
 <body>
@@ -341,7 +352,7 @@
 </section>
 
 <!-- MENU -->
-<section id="menu">
+<section id="menu" class="light-sec">
   <div class="wrap">
     <div class="head">
       <div>
@@ -477,7 +488,7 @@
 </section>
 
 <!-- DELIVERY -->
-<section id="delivery">
+<section id="delivery" class="light-sec">
   <div class="wrap">
     <div class="head" style="justify-content:center;text-align:center;flex-direction:column;align-items:center;">
       <span class="tag">Getting Your Order</span>

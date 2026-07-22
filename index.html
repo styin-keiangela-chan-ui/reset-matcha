@@ -272,6 +272,18 @@
 
   /* pills get a little press too */
   .pill:active{transform:translateY(2px);}
+
+  /* ===== OUR MATCHA ===== */
+  .matcha-intro{max-width:660px;margin:0 auto 44px;text-align:center;color:rgba(233,238,222,0.75);line-height:1.75;font-size:16px;}
+  .matcha-intro b{color:var(--matcha-bright);}
+  .benefit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .bcard{background:rgba(255,255,255,0.045);border:1px solid rgba(158,222,108,0.2);border-radius:var(--radius);padding:34px 26px;text-align:center;transition:transform .3s,border-color .3s,box-shadow .3s;}
+  .bcard:hover{transform:translateY(-6px);border-color:var(--matcha-bright);box-shadow:0 16px 30px rgba(0,0,0,0.35);}
+  .bcard .bi{font-size:42px;margin-bottom:14px;}
+  .bcard h3{font-size:19px;color:var(--matcha-bright);margin-bottom:10px;font-weight:700;}
+  .bcard p{color:rgba(233,238,222,0.78);line-height:1.6;font-size:14.5px;}
+  .matcha-note{text-align:center;margin-top:26px;font-size:12px;color:rgba(233,238,222,0.4);}
+  @media(max-width:900px){.benefit-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -282,6 +294,7 @@
     <ul class="nav-links" id="navLinks">
       <li><a href="#home">Home</a></li>
       <li><a href="#menu">Menu</a></li>
+      <li><a href="#matcha">Our Matcha</a></li>
       <li><a href="#gallery">Gallery</a></li>
       <li><a href="#delivery">Delivery</a></li>
       <li><a href="#order" class="nav-cta">Order Now</a></li>
@@ -403,6 +416,35 @@
     </div>
 
     <div class="order-note" id="orderNote">🍃 Tap "Order" on a drink to build your Instagram order note.</div>
+  </div>
+</section>
+
+<!-- OUR MATCHA -->
+<section id="matcha">
+  <div class="wrap">
+    <div class="head" style="flex-direction:column;align-items:center;text-align:center;">
+      <span class="tag">Our Matcha</span>
+      <h2>Whisked with Isuzu 五十铃 matcha</h2>
+    </div>
+    <p class="matcha-intro">We use <b>Isuzu (五十铃)</b> Japanese matcha — prized for its <b>exceptionally low bitterness</b>, deep umami, and a fragrant nori (seaweed-like) aroma. Smooth and mellow enough to enjoy on its own.</p>
+    <div class="benefit-grid">
+      <div class="bcard">
+        <div class="bi">🌿</div>
+        <h3>Powerful Antioxidant</h3>
+        <p>Rich in catechins (EGCG) and tea polyphenols that help fight free radicals — supporting anti-ageing and healthy, glowing skin.</p>
+      </div>
+      <div class="bcard">
+        <div class="bi">🧘</div>
+        <h3>Calm, Steady Focus</h3>
+        <p>Naturally contains L-theanine, which balances the caffeine for smooth, focused energy — a gentle lift without the jitters, palpitations, or crash.</p>
+      </div>
+      <div class="bcard">
+        <div class="bi">⚡</div>
+        <h3>Metabolism Support</h3>
+        <p>Catechins may help support metabolism and fat burning. Pair it with low-fat milk or oat milk for a light, feel-good pick-me-up.</p>
+      </div>
+    </div>
+    <p class="matcha-note">Best enjoyed as part of a balanced lifestyle · not intended as medical advice.</p>
   </div>
 </section>
 

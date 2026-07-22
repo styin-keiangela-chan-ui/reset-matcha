@@ -229,6 +229,49 @@
     .menu-grid{grid-template-columns:1fr;}
     .promo-text,.cta{padding:38px 26px;}
   }
+
+  /* ===== FULL-SITE BACKGROUND IMAGE ===== */
+  body{
+    background:linear-gradient(rgba(14,18,11,0.86),rgba(16,21,13,0.93)), url('hero.jpeg');
+    background-size:cover;background-position:center;background-attachment:fixed;
+  }
+  /* let the fixed backdrop show through the dark sections */
+  .gallery-sec{background:rgba(16,21,13,0.55);}
+  .order-sec{background:rgba(16,21,13,0.55);}
+
+  /* ===== 3D PRESSABLE BUTTONS ===== */
+  .btn,.order-btn,.submit-btn,.nav-cta,.btn-ig,.btn-copy{transition:transform .1s ease, box-shadow .1s ease, background .2s ease;}
+  .btn-primary{box-shadow:0 6px 0 #5f9a3f, 0 14px 22px rgba(0,0,0,0.38);}
+  .btn-primary:hover{transform:translateY(-2px);background:#b0f083;box-shadow:0 8px 0 #5f9a3f,0 18px 26px rgba(0,0,0,0.42);}
+  .btn-primary:active{transform:translateY(4px);box-shadow:0 2px 0 #5f9a3f,0 6px 12px rgba(0,0,0,0.35);}
+
+  .btn-ghost{box-shadow:0 6px 0 rgba(255,255,255,0.14), 0 12px 20px rgba(0,0,0,0.3);}
+  .btn-ghost:hover{transform:translateY(-2px);box-shadow:0 8px 0 rgba(255,255,255,0.14),0 16px 24px rgba(0,0,0,0.34);}
+  .btn-ghost:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(255,255,255,0.14),0 6px 12px rgba(0,0,0,0.3);}
+
+  .order-btn{box-shadow:0 5px 0 #5f9a3f, 0 9px 14px rgba(0,0,0,0.3);}
+  .order-btn:hover{transform:translateY(-2px);background:var(--matcha);color:#fff;box-shadow:0 7px 0 #4f7a3f,0 12px 18px rgba(0,0,0,0.34);}
+  .order-btn:active{transform:translateY(3px);box-shadow:0 2px 0 #5f9a3f,0 5px 10px rgba(0,0,0,0.3);}
+
+  .submit-btn{box-shadow:0 6px 0 #5f9a3f, 0 14px 24px rgba(0,0,0,0.4);}
+  .submit-btn:hover{transform:translateY(-2px);background:#b0f083;box-shadow:0 8px 0 #5f9a3f,0 18px 28px rgba(0,0,0,0.44);}
+  .submit-btn:active{transform:translateY(4px);box-shadow:0 2px 0 #5f9a3f,0 6px 12px rgba(0,0,0,0.35);}
+
+  .nav-cta{box-shadow:0 5px 0 #33512a, 0 8px 14px rgba(0,0,0,0.32);}
+  .nav-cta:hover{transform:translateY(-2px);box-shadow:0 7px 0 #33512a,0 12px 18px rgba(0,0,0,0.36);}
+  .nav-cta:active{transform:translateY(3px);box-shadow:0 2px 0 #33512a,0 5px 10px rgba(0,0,0,0.3);}
+
+  .btn-ig{box-shadow:0 5px 0 #ac832b, 0 9px 14px rgba(0,0,0,0.3);}
+  .btn-ig:hover{transform:translateY(-2px);}
+  .btn-ig:active{transform:translateY(3px);box-shadow:0 2px 0 #ac832b,0 5px 10px rgba(0,0,0,0.3);}
+  .btn-copy:active{transform:translateY(2px);}
+
+  .cta .btn-primary{box-shadow:0 6px 0 #cdae5f, 0 14px 22px rgba(0,0,0,0.3);}
+  .cta .btn-primary:hover{background:var(--gold);color:#fff;box-shadow:0 8px 0 #b8933f,0 18px 26px rgba(0,0,0,0.34);}
+  .cta .btn-primary:active{transform:translateY(4px);box-shadow:0 2px 0 #b8933f,0 6px 12px rgba(0,0,0,0.3);}
+
+  /* pills get a little press too */
+  .pill:active{transform:translateY(2px);}
 </style>
 </head>
 <body>

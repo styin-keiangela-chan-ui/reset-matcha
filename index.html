@@ -274,7 +274,7 @@
   /* order form stacks early so it never looks cramped */
   @media(max-width:760px){
     .frow{grid-template-columns:1fr;}
-    .item .irow{grid-template-columns:2fr 1fr;gap:10px;}
+    .item .irow{grid-template-columns:1fr 1fr;gap:10px;}
     .item .irow .field:first-child{grid-column:1 / -1;}
   }
   @media(max-width:600px){
@@ -334,6 +334,17 @@
   .light-sec .order-note{background:#fff;color:var(--matcha-deep);border-color:var(--matcha);}
   .light-sec .area span{background:#fff;box-shadow:0 4px 14px rgba(40,60,30,0.1);}
   .light-sec .dcard{border-top-color:var(--matcha-deep);}
+
+  /* ===== MENU OPTION CHIPS + ALLERGEN ===== */
+  .card .opts{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+  .card .opts span{font-size:11px;font-weight:700;color:#5c6544;background:rgba(110,119,83,0.14);border:1px solid rgba(110,119,83,0.28);border-radius:14px;padding:5px 10px;}
+  .card .opts span.cf{color:#8a5a12;background:rgba(224,182,74,0.16);border-color:rgba(224,182,74,0.45);}
+  .allergen{max-width:820px;margin:26px auto 0;background:#fffdf5;border:1px solid #e0b64a;border-radius:16px;padding:16px 20px;font-size:13.5px;line-height:1.6;color:#3a3320;}
+  .allergen b{color:#8a5a12;}
+  /* cheese foam toggle in order form */
+  .order-form .cheese{display:flex;align-items:center;gap:9px;margin-top:12px;font-family:'Poppins';font-weight:700;font-size:13.5px;color:#33512a;cursor:pointer;}
+  .order-form .cheese input{width:18px;height:18px;accent-color:#6E7753;cursor:pointer;}
+  .item .irow{grid-template-columns:1.5fr 0.85fr 1.15fr 0.65fr;}
 </style>
 </head>
 <body>
@@ -398,74 +409,76 @@
         <span class="tag">Our Menu</span>
         <h2>Best sips we make</h2>
       </div>
-      <div class="filters">
-        <button class="pill active">All</button>
-        <button class="pill">Matcha</button>
-        <button class="pill">Hojicha</button>
-        <button class="pill">Iced</button>
-      </div>
     </div>
 
     <div class="menu-grid">
-      <!-- Card 1 -->
+      <!-- Matcha Latte -->
       <div class="card">
-        <div class="cardphoto photo" style="background-image:url('iced-flower.avif');">
-          <span class="cardtag">Best Seller</span>
+        <div class="cardphoto photo" style="background-image:url('menu-matcha.webp');">
+          <span class="cardtag">Signature</span>
         </div>
         <div class="card-body">
           <h3>Matcha Latte</h3>
-          <p class="desc">Ceremonial-grade matcha whisked smooth with your choice of milk. Hot or iced.</p>
-          <div class="milk">
-            <label><input type="radio" name="m1" value="Low-fat Milk" checked><span>Low-fat Milk</span></label>
-            <label><input type="radio" name="m1" value="Oat Milk"><span>Oat Milk</span></label>
-          </div>
+          <p class="desc">Ceremonial-grade matcha whisked smooth with your choice of milk. Served hot or iced.</p>
+          <div class="opts"><span>Hot / Iced</span><span>Low-fat / Oat</span><span class="cf">＋ Cheese Foam 奶盖</span></div>
           <div class="card-foot">
-            <div class="price">RM 9.00<small> / cup</small></div>
-            <a href="#order" class="order-btn" onclick="setOrder('Matcha Latte','m1')">Order</a>
+            <div class="price">Price soon</div>
+            <a href="#order" class="order-btn" onclick="setOrder('Matcha Latte')">Order</a>
           </div>
         </div>
       </div>
 
-      <!-- Card 2 -->
+      <!-- Oreo Matcha Latte -->
       <div class="card">
-        <div class="cardphoto photo" style="background-image:url('iced-closeup.jpeg');">
-          <span class="cardtag">Iced Fav</span>
+        <div class="cardphoto photo" style="background-image:url('menu-oreo.jpeg');">
+          <span class="cardtag">Crowd Fav</span>
         </div>
         <div class="card-body">
-          <h3>Iced Matcha Latte</h3>
-          <p class="desc">Chilled over ice and topped with a soft milk layer — refreshing and smooth for hot days.</p>
-          <div class="milk">
-            <label><input type="radio" name="m2" value="Low-fat Milk" checked><span>Low-fat Milk</span></label>
-            <label><input type="radio" name="m2" value="Oat Milk"><span>Oat Milk</span></label>
-          </div>
+          <h3>Oreo Matcha Latte</h3>
+          <p class="desc">Layers of smooth matcha, milk and crushed Oreo cookies for a sweet, creamy treat.</p>
+          <div class="opts"><span>Iced</span><span>Low-fat / Oat</span><span class="cf">＋ Cheese Foam 奶盖</span></div>
           <div class="card-foot">
-            <div class="price">RM 9.00<small> / cup</small></div>
-            <a href="#order" class="order-btn" onclick="setOrder('Iced Matcha Latte','m2')">Order</a>
+            <div class="price">Price soon</div>
+            <a href="#order" class="order-btn" onclick="setOrder('Oreo Matcha Latte')">Order</a>
           </div>
         </div>
       </div>
 
-      <!-- Card 3 -->
+      <!-- Strawberry Matcha Latte -->
       <div class="card">
-        <div class="cardphoto photo" style="background-image:url('whisk-editorial.jpeg');">
-          <span class="cardtag">Homemade</span>
+        <div class="cardphoto photo" style="background-image:url('menu-strawberry.jpg');">
+          <span class="cardtag">Sweet</span>
         </div>
         <div class="card-body">
-          <h3>Hojicha Latte</h3>
-          <p class="desc">Roasted hojicha with a warm, toasty flavour, whisked with your choice of milk. Hot or iced.</p>
-          <div class="milk">
-            <label><input type="radio" name="m3" value="Low-fat Milk" checked><span>Low-fat Milk</span></label>
-            <label><input type="radio" name="m3" value="Oat Milk"><span>Oat Milk</span></label>
-          </div>
+          <h3>Strawberry Matcha Latte</h3>
+          <p class="desc">Fresh strawberry layered with creamy milk and earthy matcha — fruity and refreshing.</p>
+          <div class="opts"><span>Iced</span><span>Low-fat / Oat</span><span class="cf">＋ Cheese Foam 奶盖</span></div>
           <div class="card-foot">
-            <div class="price">RM 9.00<small> / cup</small></div>
-            <a href="#order" class="order-btn" onclick="setOrder('Hojicha Latte','m3')">Order</a>
+            <div class="price">Price soon</div>
+            <a href="#order" class="order-btn" onclick="setOrder('Strawberry Matcha Latte')">Order</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coconut Matcha Cloud -->
+      <div class="card">
+        <div class="cardphoto photo" style="background-image:url('menu-coconut.jpg');">
+          <span class="cardtag">New</span>
+        </div>
+        <div class="card-body">
+          <h3>Coconut Matcha Cloud</h3>
+          <p class="desc">Silky coconut cloud poured over ice and topped with whisked matcha — light and dreamy.</p>
+          <div class="opts"><span>Iced</span><span>Coconut-based</span></div>
+          <div class="card-foot">
+            <div class="price">Price soon</div>
+            <a href="#order" class="order-btn" onclick="setOrder('Coconut Matcha Cloud')">Order</a>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="order-note" id="orderNote">🍃 Tap "Order" on a drink to build your Instagram order note.</div>
+    <div class="allergen">⚠️ <b>Allergen note:</b> Our drinks contain <b>dairy</b> (milk &amp; cheese foam 奶盖). The Oreo Matcha Latte contains <b>gluten</b>, and the Coconut Matcha Cloud contains <b>coconut</b>. Everything is prepared in a home kitchen that also handles nuts, soy, gluten &amp; dairy — please tell us about any allergies when you order. 🙏</div>
+    <div class="order-note" id="orderNote">🍃 Tap "Order" on a drink to start your order below.</div>
   </div>
 </section>
 
@@ -608,12 +621,9 @@
         <div><b>Every cup is homemade &amp; whisked fresh to order.</b> To keep the quality perfect, we don't do same-day orders — please book from <b>tomorrow onwards</b>. We'll reply on Instagram to confirm your exact delivery / 面交 handover time before we whisk your order. 🍃</div>
       </div>
 
-      <div class="order-total" style="display:flex;justify-content:space-between;align-items:center;background:#f4f6f0;border:1px solid rgba(56,66,43,0.25);border-radius:14px;padding:16px 20px;margin-bottom:18px;">
-        <span style="font-family:'Poppins';font-weight:700;color:#26301a;font-size:15px;">Total</span>
-        <span style="text-align:right;">
-          <span id="orderTotal" style="font-family:'Poppins';font-weight:800;font-size:24px;color:#38422B;">RM 9.00</span>
-          <div style="font-size:11px;color:rgba(38,48,26,0.6);">excludes Lalamove delivery fee</div>
-        </span>
+      <div class="order-total" style="display:flex;justify-content:space-between;align-items:center;gap:14px;background:#f4f6f0;border:1px solid rgba(56,66,43,0.25);border-radius:14px;padding:16px 20px;margin-bottom:18px;">
+        <span style="font-family:'Poppins';font-weight:700;color:#26301a;font-size:14px;">💬 Prices are being finalised</span>
+        <span style="font-size:12px;color:rgba(38,48,26,0.62);text-align:right;">We'll confirm your total on Instagram · Lalamove fee separate</span>
       </div>
 
       <button type="submit" class="submit-btn">📩 Send order &amp; open Instagram</button>
@@ -652,21 +662,8 @@
     p.classList.add('active');
   }));
 
-  // menu card price updates with milk choice (oat milk = RM10.00)
-  document.querySelectorAll('.menu-grid .card').forEach(card=>{
-    card.querySelectorAll('.milk input').forEach(inp=>{
-      inp.addEventListener('change',()=>{
-        const oat=inp.value.indexOf('Oat')>-1;
-        const priceEl=card.querySelector('.price');
-        if(priceEl) priceEl.innerHTML='RM '+(oat?'10.00':'9.00')+'<small> / cup</small>';
-      });
-    });
-  });
-
   // ---- MULTIPLE DRINK ITEMS ----
-  const DRINKS=['Matcha Latte','Iced Matcha Latte','Hojicha Latte'];
-  const PRICE=9, OAT_EXTRA=1;   // RM per cup; oat milk surcharge
-  function perCup(milk){ return PRICE + ((milk||'').indexOf('Oat')>-1 ? OAT_EXTRA : 0); }
+  const DRINKS=['Matcha Latte','Oreo Matcha Latte','Strawberry Matcha Latte','Coconut Matcha Cloud'];
 
   function buildItem(drink,milk){
     const wrap=document.createElement('div');
@@ -674,50 +671,60 @@
     const dOpts='<option value="">Choose drink…</option>'+DRINKS.map(d=>`<option${drink===d?' selected':''}>${d}</option>`).join('');
     const mOpts='<option value="">Choose milk…</option>'+
       '<option value="Low-fat Milk"'+(milk==='Low-fat Milk'?' selected':'')+'>Low-fat Milk</option>'+
-      '<option value="Oat Milk"'+(milk==='Oat Milk'?' selected':'')+'>Oat Milk (+RM1)</option>';
+      '<option value="Oat Milk"'+(milk==='Oat Milk'?' selected':'')+'>Oat Milk</option>';
     wrap.innerHTML='<button type="button" class="it-remove" title="Remove">×</button>'+
       '<div class="irow">'+
         '<div class="field"><label>Drink <span class="req">*</span></label><select class="it-drink" required>'+dOpts+'</select></div>'+
+        '<div class="field"><label>Temp</label><select class="it-temp"><option>Iced</option><option>Hot</option></select></div>'+
         '<div class="field"><label>Milk <span class="req">*</span></label><select class="it-milk" required>'+mOpts+'</select></div>'+
         '<div class="field"><label>Qty <span class="req">*</span></label><input type="number" class="it-qty" min="1" value="1" required></div>'+
-      '</div>';
-    wrap.querySelectorAll('select,input').forEach(el=>{el.addEventListener('change',updateTotal);el.addEventListener('input',updateTotal);});
+      '</div>'+
+      '<label class="cheese"><input type="checkbox" class="it-cheese"> ＋ Add Cheese Foam 奶盖</label>';
+    const drinkSel=wrap.querySelector('.it-drink');
+    const tempSel=wrap.querySelector('.it-temp');
+    const cheeseLbl=wrap.querySelector('.cheese');
+    const cheeseCb=wrap.querySelector('.it-cheese');
+    function syncOptions(){
+      const v=drinkSel.value;
+      const cheeseOK = v && v!=='Coconut Matcha Cloud';   // cheese foam not for Coconut Cloud
+      cheeseLbl.style.display = cheeseOK ? 'flex' : 'none';
+      if(!cheeseOK) cheeseCb.checked=false;
+      if(v==='Matcha Latte'){ tempSel.disabled=false; }   // hot only for Matcha Latte
+      else { tempSel.value='Iced'; tempSel.disabled=(v!==''); }
+    }
+    drinkSel.addEventListener('change',syncOptions);
+    syncOptions();
     wrap.querySelector('.it-remove').addEventListener('click',()=>{
       const items=document.querySelectorAll('#items .item');
       if(items.length>1){wrap.remove();}
-      else{wrap.querySelector('.it-drink').value='';wrap.querySelector('.it-milk').value='';wrap.querySelector('.it-qty').value=1;}
-      updateTotal();
+      else{drinkSel.value='';wrap.querySelector('.it-milk').value='';wrap.querySelector('.it-qty').value=1;cheeseCb.checked=false;syncOptions();}
     });
     return wrap;
   }
   function addItem(drink,milk){
     const el=buildItem(drink,milk);
     document.getElementById('items').appendChild(el);
-    updateTotal();
     return el;
   }
   function itemsData(){
     return [...document.querySelectorAll('#items .item')].map(it=>({
       drink:it.querySelector('.it-drink').value,
+      temp:it.querySelector('.it-temp').value,
       milk:it.querySelector('.it-milk').value,
+      cheese:it.querySelector('.it-cheese').checked,
       qty:Math.max(1,parseInt(it.querySelector('.it-qty').value)||1)
     }));
   }
-  function updateTotal(){
-    let total=0;
-    itemsData().forEach(i=>{ if(i.drink) total+=perCup(i.milk)*i.qty; });
-    document.getElementById('orderTotal').textContent='RM '+total.toFixed(2);
-  }
+  function updateTotal(){}  // prices TBC — total confirmed on Instagram
   addItem(); // start with one drink row
 
-  function setOrder(drink,group){
-    const milk=document.querySelector(`input[name="${group}"]:checked`).value;
-    document.getElementById('orderNote').textContent=`🍃 Added: ${drink} + ${milk} — scroll down to review & add more!`;
+  function setOrder(drink){
+    document.getElementById('orderNote').textContent='🍃 Added: '+drink+' — scroll down to pick your options & add more!';
     const items=[...document.querySelectorAll('#items .item')];
     const empty=items.find(it=>!it.querySelector('.it-drink').value);
-    if(empty){empty.querySelector('.it-drink').value=drink;empty.querySelector('.it-milk').value=milk;}
-    else{addItem(drink,milk);}
-    updateTotal();
+    const target=empty||addItem();
+    const sel=target.querySelector('.it-drink');
+    sel.value=drink; sel.dispatchEvent(new Event('change'));
     document.getElementById('order').scrollIntoView({behavior:'smooth'});
   }
 
@@ -761,14 +768,13 @@
     const method=document.querySelector('input[name="method"]:checked').value;
     const isDelivery=method.indexOf('Lalamove')>-1;
     let s='🍵 reset.matcha — New Order\n─────────────────\n';
-    let total=0;
     itemsData().forEach(i=>{
       if(!i.drink) return;
-      const line=perCup(i.milk)*i.qty; total+=line;
-      s+='• '+i.qty+' × '+i.drink+' ('+(i.milk||'—')+') — RM '+line.toFixed(2)+'\n';
+      const extras=[i.temp,i.milk].filter(Boolean);
+      if(i.cheese) extras.push('+ Cheese Foam 奶盖');
+      s+='• '+i.qty+' × '+i.drink+(extras.length?' ('+extras.join(', ')+')':'')+'\n';
     });
     if(g('f_notes')) s+='• Special requests: '+g('f_notes')+'\n';
-    s+='• Total: RM '+total.toFixed(2)+' (excl. Lalamove fee)\n';
     s+='─────────────────\n';
     s+='• Receive by: '+method+'\n';
     if(isDelivery) s+='• Delivery address: '+g('f_addr')+'\n';
@@ -777,7 +783,7 @@
     s+='─────────────────\n';
     s+='• Name: '+g('f_name')+'\n';
     if(g('f_contact')) s+='• Contact: '+g('f_contact')+'\n';
-    s+='\nPlease confirm my delivery / 面交 handover time 🙏 加油!';
+    s+='\nPlease confirm my total price & delivery / 面交 handover time 🙏 加油!';
     return s;
   }
 

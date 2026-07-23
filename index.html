@@ -263,6 +263,16 @@
   .cta .btn-primary:hover{background:var(--gold);color:#fff;transform:translateY(-2px);}
   .cta .btn-primary:active{transform:translateY(0);}
 
+  /* ===== MULTI-DRINK ITEMS ===== */
+  .items-label{font-size:13px;font-weight:700;color:var(--matcha-bright);font-family:'Poppins';display:block;margin-bottom:10px;}
+  .item{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.14);border-radius:14px;padding:14px;margin-bottom:12px;position:relative;}
+  .item .irow{display:grid;grid-template-columns:1.5fr 1.3fr 0.7fr;gap:12px;}
+  .item .it-remove{position:absolute;top:-10px;right:-10px;width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,255,255,0.25);background:#3a3327;color:#fff;font-size:16px;line-height:22px;text-align:center;cursor:pointer;transition:background .2s;z-index:2;padding:0;}
+  .item .it-remove:hover{background:#7a3b34;}
+  .add-item{width:100%;background:transparent;border:1.5px dashed var(--matcha);color:var(--matcha-bright);border-radius:14px;padding:12px;font-family:'Poppins';font-weight:700;font-size:14px;cursor:pointer;transition:background .2s;}
+  .add-item:hover{background:rgba(159,184,115,0.12);}
+  @media(max-width:600px){.item .irow{grid-template-columns:1fr 1fr;}}
+
   /* ===== OUR MATCHA ===== */
   .matcha-intro{max-width:660px;margin:0 auto 44px;text-align:center;color:rgba(233,238,222,0.75);line-height:1.75;font-size:16px;}
   .matcha-intro b{color:var(--matcha-bright);}
@@ -510,41 +520,19 @@
     <p class="lead">Fill in your order below, pick a date, and choose how you'd like to receive it. We'll message you on Instagram to confirm your exact delivery or meetup time.</p>
 
     <form class="order-form" id="orderForm" onsubmit="return submitOrder(event)">
-      <div class="frow">
-        <div class="field">
-          <label>Drink <span class="req">*</span></label>
-          <select id="f_drink" required>
-            <option value="">Choose a drink…</option>
-            <option>Matcha Latte</option>
-            <option>Iced Matcha Latte</option>
-            <option>Hojicha Latte</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Milk <span class="req">*</span></label>
-          <select id="f_milk" required>
-            <option value="">Choose milk…</option>
-            <option value="Low-fat Milk">Low-fat Milk</option>
-            <option value="Oat Milk">Oat Milk</option>
-          </select>
-        </div>
+      <label class="items-label">Your drinks <span class="req" style="color:var(--gold);">*</span></label>
+      <div id="items"></div>
+      <button type="button" class="add-item" onclick="addItem()">＋ Add another drink</button>
+
+      <div class="field full" style="margin:18px 0 0;">
+        <label>Preferred date <span class="req">*</span></label>
+        <input type="date" id="f_date" required>
+        <span style="font-size:11.5px;color:var(--matcha-bright);">🍵 Made fresh — tomorrow onwards</span>
       </div>
 
-      <div class="frow">
-        <div class="field">
-          <label>Quantity <span class="req">*</span></label>
-          <input type="number" id="f_qty" min="1" value="1" required>
-        </div>
-        <div class="field">
-          <label>Preferred date <span class="req">*</span></label>
-          <input type="date" id="f_date" required>
-          <span style="font-size:11.5px;color:var(--matcha-bright);">🍵 Made fresh — tomorrow onwards</span>
-        </div>
-      </div>
-
-      <div class="field full" style="margin-bottom:18px;">
-        <label>Extra items / notes <span style="color:rgba(255,255,255,0.4);font-weight:600;">(optional)</span></label>
-        <textarea id="f_notes" placeholder="e.g. 1 more Hojicha with oat milk, less ice, no sugar…"></textarea>
+      <div class="field full" style="margin:18px 0;">
+        <label>Special requests <span style="color:rgba(255,255,255,0.4);font-weight:600;">(optional)</span></label>
+        <textarea id="f_notes" placeholder="e.g. less ice, no sugar, extra hot…"></textarea>
       </div>
 
       <label style="font-size:13px;font-weight:700;color:var(--matcha-bright);font-family:'Poppins';display:block;margin-bottom:10px;">How would you like it? <span class="req" style="color:var(--gold);">*</span></label>
@@ -635,30 +623,63 @@
     });
   });
 
-  function setOrder(drink,group){
-    const milk=document.querySelector(`input[name="${group}"]:checked`).value;
-    document.getElementById('orderNote').textContent=`🍃 Your pick: ${drink} + ${milk} — scroll down to the order form to book it!`;
-    document.getElementById('order').scrollIntoView({behavior:'smooth'});
-    const ds=document.getElementById('f_drink');
-    if([...ds.options].some(o=>o.value===drink)) ds.value=drink;
-    document.getElementById('f_milk').value=milk;
-    updateTotal();
-  }
-
-  // ---- LIVE TOTAL ----
+  // ---- MULTIPLE DRINK ITEMS ----
+  const DRINKS=['Matcha Latte','Iced Matcha Latte','Hojicha Latte'];
   const PRICE=9, OAT_EXTRA=1;   // RM per cup; oat milk surcharge
   function perCup(milk){ return PRICE + ((milk||'').indexOf('Oat')>-1 ? OAT_EXTRA : 0); }
-  function orderQty(){ return Math.max(1, parseInt(document.getElementById('f_qty').value)||1); }
-  function updateTotal(){
-    const milk=document.getElementById('f_milk').value;
-    const total=(perCup(milk)*orderQty()).toFixed(2);
-    document.getElementById('orderTotal').textContent='RM '+total;
+
+  function buildItem(drink,milk){
+    const wrap=document.createElement('div');
+    wrap.className='item';
+    const dOpts='<option value="">Choose drink…</option>'+DRINKS.map(d=>`<option${drink===d?' selected':''}>${d}</option>`).join('');
+    const mOpts='<option value="">Choose milk…</option>'+
+      '<option value="Low-fat Milk"'+(milk==='Low-fat Milk'?' selected':'')+'>Low-fat Milk</option>'+
+      '<option value="Oat Milk"'+(milk==='Oat Milk'?' selected':'')+'>Oat Milk (+RM1)</option>';
+    wrap.innerHTML='<button type="button" class="it-remove" title="Remove">×</button>'+
+      '<div class="irow">'+
+        '<div class="field"><label>Drink <span class="req">*</span></label><select class="it-drink" required>'+dOpts+'</select></div>'+
+        '<div class="field"><label>Milk <span class="req">*</span></label><select class="it-milk" required>'+mOpts+'</select></div>'+
+        '<div class="field"><label>Qty <span class="req">*</span></label><input type="number" class="it-qty" min="1" value="1" required></div>'+
+      '</div>';
+    wrap.querySelectorAll('select,input').forEach(el=>{el.addEventListener('change',updateTotal);el.addEventListener('input',updateTotal);});
+    wrap.querySelector('.it-remove').addEventListener('click',()=>{
+      const items=document.querySelectorAll('#items .item');
+      if(items.length>1){wrap.remove();}
+      else{wrap.querySelector('.it-drink').value='';wrap.querySelector('.it-milk').value='';wrap.querySelector('.it-qty').value=1;}
+      updateTotal();
+    });
+    return wrap;
   }
-  ['f_drink','f_milk','f_qty'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el){el.addEventListener('change',updateTotal);el.addEventListener('input',updateTotal);}
-  });
-  updateTotal();
+  function addItem(drink,milk){
+    const el=buildItem(drink,milk);
+    document.getElementById('items').appendChild(el);
+    updateTotal();
+    return el;
+  }
+  function itemsData(){
+    return [...document.querySelectorAll('#items .item')].map(it=>({
+      drink:it.querySelector('.it-drink').value,
+      milk:it.querySelector('.it-milk').value,
+      qty:Math.max(1,parseInt(it.querySelector('.it-qty').value)||1)
+    }));
+  }
+  function updateTotal(){
+    let total=0;
+    itemsData().forEach(i=>{ if(i.drink) total+=perCup(i.milk)*i.qty; });
+    document.getElementById('orderTotal').textContent='RM '+total.toFixed(2);
+  }
+  addItem(); // start with one drink row
+
+  function setOrder(drink,group){
+    const milk=document.querySelector(`input[name="${group}"]:checked`).value;
+    document.getElementById('orderNote').textContent=`🍃 Added: ${drink} + ${milk} — scroll down to review & add more!`;
+    const items=[...document.querySelectorAll('#items .item')];
+    const empty=items.find(it=>!it.querySelector('.it-drink').value);
+    if(empty){empty.querySelector('.it-drink').value=drink;empty.querySelector('.it-milk').value=milk;}
+    else{addItem(drink,milk);}
+    updateTotal();
+    document.getElementById('order').scrollIntoView({behavior:'smooth'});
+  }
 
   // ---- ORDER FORM ----
   const IG_URL='https://instagram.com/reset.matcha'; // <-- change to your real Instagram
@@ -691,16 +712,18 @@
   }
 
   function buildSummary(){
-    const g=id=>document.getElementById(id).value.trim();
+    const g=id=>{const el=document.getElementById(id);return el?el.value.trim():'';};
     const method=document.querySelector('input[name="method"]:checked').value;
     const addrLabel=method.indexOf('Lalamove')>-1?'Delivery address':'Preferred meetup area';
-    let s='🍵 reset.matcha — New Order\n';
-    s+='─────────────────\n';
-    s+='• Drink: '+g('f_drink')+'\n';
-    s+='• Milk: '+g('f_milk')+'\n';
-    s+='• Quantity: '+g('f_qty')+'\n';
-    if(g('f_notes')) s+='• Extra / notes: '+g('f_notes')+'\n';
-    s+='• Total: RM '+(perCup(g('f_milk'))*orderQty()).toFixed(2)+' (excl. Lalamove fee)\n';
+    let s='🍵 reset.matcha — New Order\n─────────────────\n';
+    let total=0;
+    itemsData().forEach(i=>{
+      if(!i.drink) return;
+      const line=perCup(i.milk)*i.qty; total+=line;
+      s+='• '+i.qty+' × '+i.drink+' ('+(i.milk||'—')+') — RM '+line.toFixed(2)+'\n';
+    });
+    if(g('f_notes')) s+='• Special requests: '+g('f_notes')+'\n';
+    s+='• Total: RM '+total.toFixed(2)+' (excl. Lalamove fee)\n';
     s+='─────────────────\n';
     s+='• Receive by: '+method+'\n';
     s+='• '+addrLabel+': '+g('f_addr')+'\n';

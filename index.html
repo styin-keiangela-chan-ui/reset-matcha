@@ -438,7 +438,7 @@
           <p class="desc">Layers of smooth matcha, milk and crushed Oreo cookies for a sweet, creamy treat.</p>
           <div class="opts"><span>Iced</span><span>Low-fat / Oat</span><span class="cf">＋ Cheese Foam 奶盖</span></div>
           <div class="card-foot">
-            <div class="price">Price soon</div>
+            <div class="price">RM 12.50<small> / cup</small></div>
             <a href="#order" class="order-btn" onclick="setOrder('Oreo Matcha Latte')">Order</a>
           </div>
         </div>
@@ -454,7 +454,7 @@
           <p class="desc">Fresh strawberry layered with creamy milk and earthy matcha — fruity and refreshing.</p>
           <div class="opts"><span>Iced</span><span>Low-fat / Oat</span><span class="cf">＋ Cheese Foam 奶盖</span></div>
           <div class="card-foot">
-            <div class="price">Price soon</div>
+            <div class="price">RM 13.50<small> / cup</small></div>
             <a href="#order" class="order-btn" onclick="setOrder('Strawberry Matcha Latte')">Order</a>
           </div>
         </div>
@@ -622,8 +622,11 @@
       </div>
 
       <div class="order-total" style="display:flex;justify-content:space-between;align-items:center;gap:14px;background:#f4f6f0;border:1px solid rgba(56,66,43,0.25);border-radius:14px;padding:16px 20px;margin-bottom:18px;">
-        <span style="font-family:'Poppins';font-weight:700;color:#26301a;font-size:14px;">💬 Prices are being finalised</span>
-        <span style="font-size:12px;color:rgba(38,48,26,0.62);text-align:right;">We'll confirm your total on Instagram · Lalamove fee separate</span>
+        <span style="font-family:'Poppins';font-weight:700;color:#26301a;font-size:15px;">Total</span>
+        <span style="text-align:right;">
+          <span id="orderTotal" style="font-family:'Poppins';font-weight:800;font-size:24px;color:#38422B;">RM —</span>
+          <div id="orderTotalNote" style="font-size:11px;color:rgba(38,48,26,0.6);">excludes Lalamove delivery fee</div>
+        </span>
       </div>
 
       <button type="submit" class="submit-btn">📩 Send order &amp; open Instagram</button>
@@ -664,6 +667,8 @@
 
   // ---- MULTIPLE DRINK ITEMS ----
   const DRINKS=['Matcha Latte','Oreo Matcha Latte','Strawberry Matcha Latte','Coconut Matcha Cloud'];
+  const PRICES={'Matcha Latte':null,'Oreo Matcha Latte':12.50,'Strawberry Matcha Latte':13.50,'Coconut Matcha Cloud':null}; // null = price TBC
+  const OAT_EXTRA=1.00, FOAM_EXTRA=2.50;  // add-ons: oat milk +RM1, cheese foam 奶盖 +RM2.50
 
   function buildItem(drink,milk){
     const wrap=document.createElement('div');
@@ -671,7 +676,7 @@
     const dOpts='<option value="">Choose drink…</option>'+DRINKS.map(d=>`<option${drink===d?' selected':''}>${d}</option>`).join('');
     const mOpts='<option value="">Choose milk…</option>'+
       '<option value="Low-fat Milk"'+(milk==='Low-fat Milk'?' selected':'')+'>Low-fat Milk</option>'+
-      '<option value="Oat Milk"'+(milk==='Oat Milk'?' selected':'')+'>Oat Milk</option>';
+      '<option value="Oat Milk"'+(milk==='Oat Milk'?' selected':'')+'>Oat Milk (+RM1)</option>';
     wrap.innerHTML='<button type="button" class="it-remove" title="Remove">×</button>'+
       '<div class="irow">'+
         '<div class="field"><label>Drink <span class="req">*</span></label><select class="it-drink" required>'+dOpts+'</select></div>'+
@@ -679,7 +684,7 @@
         '<div class="field"><label>Milk <span class="req">*</span></label><select class="it-milk" required>'+mOpts+'</select></div>'+
         '<div class="field"><label>Qty <span class="req">*</span></label><input type="number" class="it-qty" min="1" value="1" required></div>'+
       '</div>'+
-      '<label class="cheese"><input type="checkbox" class="it-cheese"> ＋ Add Cheese Foam 奶盖</label>';
+      '<label class="cheese"><input type="checkbox" class="it-cheese"> ＋ Add Cheese Foam 奶盖 (+RM2.50)</label>';
     const drinkSel=wrap.querySelector('.it-drink');
     const tempSel=wrap.querySelector('.it-temp');
     const cheeseLbl=wrap.querySelector('.cheese');
@@ -691,19 +696,23 @@
       if(!cheeseOK) cheeseCb.checked=false;
       if(v==='Matcha Latte'){ tempSel.disabled=false; }   // hot only for Matcha Latte
       else { tempSel.value='Iced'; tempSel.disabled=(v!==''); }
+      updateTotal();
     }
     drinkSel.addEventListener('change',syncOptions);
+    wrap.querySelectorAll('select,input').forEach(el=>{el.addEventListener('change',updateTotal);el.addEventListener('input',updateTotal);});
     syncOptions();
     wrap.querySelector('.it-remove').addEventListener('click',()=>{
       const items=document.querySelectorAll('#items .item');
       if(items.length>1){wrap.remove();}
       else{drinkSel.value='';wrap.querySelector('.it-milk').value='';wrap.querySelector('.it-qty').value=1;cheeseCb.checked=false;syncOptions();}
+      updateTotal();
     });
     return wrap;
   }
   function addItem(drink,milk){
     const el=buildItem(drink,milk);
     document.getElementById('items').appendChild(el);
+    updateTotal();
     return el;
   }
   function itemsData(){
@@ -715,7 +724,21 @@
       qty:Math.max(1,parseInt(it.querySelector('.it-qty').value)||1)
     }));
   }
-  function updateTotal(){}  // prices TBC — total confirmed on Instagram
+  function itemPrice(i){
+    const base=PRICES[i.drink];
+    if(base==null) return null;
+    return (base + (/Oat/.test(i.milk)?OAT_EXTRA:0) + (i.cheese?FOAM_EXTRA:0)) * i.qty;
+  }
+  function updateTotal(){
+    const el=document.getElementById('orderTotal'); if(!el) return;
+    const note=document.getElementById('orderTotalNote');
+    const data=itemsData().filter(i=>i.drink);
+    if(!data.length){ el.textContent='RM —'; if(note)note.textContent='Add a drink to see your total'; return; }
+    let total=0, tbc=false;
+    data.forEach(i=>{const p=itemPrice(i); if(p==null) tbc=true; else total+=p;});
+    el.textContent='RM '+total.toFixed(2)+(tbc?'+':'');
+    if(note)note.textContent=(tbc?'Some prices confirmed on IG · ':'')+'excludes Lalamove fee';
+  }
   addItem(); // start with one drink row
 
   function setOrder(drink){
@@ -768,13 +791,16 @@
     const method=document.querySelector('input[name="method"]:checked').value;
     const isDelivery=method.indexOf('Lalamove')>-1;
     let s='🍵 reset.matcha — New Order\n─────────────────\n';
+    let total=0, tbc=false;
     itemsData().forEach(i=>{
       if(!i.drink) return;
       const extras=[i.temp,i.milk].filter(Boolean);
-      if(i.cheese) extras.push('+ Cheese Foam 奶盖');
-      s+='• '+i.qty+' × '+i.drink+(extras.length?' ('+extras.join(', ')+')':'')+'\n';
+      if(i.cheese) extras.push('Cheese Foam 奶盖');
+      const p=itemPrice(i); if(p==null) tbc=true; else total+=p;
+      s+='• '+i.qty+' × '+i.drink+(extras.length?' ('+extras.join(', ')+')':'')+(p!=null?' — RM '+p.toFixed(2):' — price TBC')+'\n';
     });
     if(g('f_notes')) s+='• Special requests: '+g('f_notes')+'\n';
+    s+='• Total: RM '+total.toFixed(2)+(tbc?'+ (some prices TBC)':'')+' (excl. Lalamove fee)\n';
     s+='─────────────────\n';
     s+='• Receive by: '+method+'\n';
     if(isDelivery) s+='• Delivery address: '+g('f_addr')+'\n';

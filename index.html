@@ -345,6 +345,14 @@
   .order-form .cheese{display:flex;align-items:center;gap:9px;margin-top:12px;font-family:'Poppins';font-weight:700;font-size:13.5px;color:#33512a;cursor:pointer;}
   .order-form .cheese input{width:18px;height:18px;accent-color:#6E7753;cursor:pointer;}
   .item .irow{grid-template-columns:1.5fr 0.85fr 1.15fr 0.65fr;}
+
+  /* ===== ADDRESS SEARCH + LOCATION ===== */
+  .addr-suggest .sug{background:#fff;border:1px solid rgba(56,66,43,0.2);border-radius:12px;margin:-4px 0 8px;overflow:hidden;box-shadow:0 10px 24px rgba(0,0,0,0.14);}
+  .addr-suggest .sug div{padding:10px 14px;font-size:13px;color:#26301a;cursor:pointer;border-bottom:1px solid rgba(56,66,43,0.08);line-height:1.4;}
+  .addr-suggest .sug div:last-child{border-bottom:none;}
+  .addr-suggest .sug div:hover{background:#eef4e6;}
+  .use-loc{margin-top:8px;background:#eef4e6;border:1px solid #6E7753;color:#33512a;border-radius:12px;padding:11px 14px;font-family:'Poppins';font-weight:700;font-size:13px;cursor:pointer;transition:background .2s;width:100%;}
+  .use-loc:hover{background:#dcebca;}
 </style>
 </head>
 <body>
@@ -422,7 +430,7 @@
           <p class="desc">Ceremonial-grade matcha whisked smooth with your choice of milk. Served hot or iced.</p>
           <div class="opts"><span>Hot / Iced</span><span>Low-fat / Oat</span><span class="cf">＋ Cheese Foam 奶盖</span></div>
           <div class="card-foot">
-            <div class="price">Price soon</div>
+            <div class="price">RM 10.50<small> / cup</small></div>
             <a href="#order" class="order-btn" onclick="setOrder('Matcha Latte')">Order</a>
           </div>
         </div>
@@ -470,7 +478,7 @@
           <p class="desc">Silky coconut cloud poured over ice and topped with whisked matcha — light and dreamy.</p>
           <div class="opts"><span>Iced</span><span>Coconut-based</span></div>
           <div class="card-foot">
-            <div class="price">Price soon</div>
+            <div class="price">RM 12.50<small> / cup</small></div>
             <a href="#order" class="order-btn" onclick="setOrder('Coconut Matcha Cloud')">Order</a>
           </div>
         </div>
@@ -600,8 +608,14 @@
       </div>
 
       <div class="field full" id="addrField" style="margin-bottom:18px;">
-        <label id="addrLabel">Delivery address <span class="req">*</span></label>
-        <textarea id="f_addr" placeholder="Your delivery address (within Penang)" required></textarea>
+        <div id="deliveryFields">
+          <label id="addrLabel">Delivery address <span class="req">*</span></label>
+          <input type="text" id="f_addr_search" placeholder="🔍 Search your address (Penang)…" autocomplete="off" style="margin-bottom:8px;">
+          <div id="addrSuggest" class="addr-suggest"></div>
+          <textarea id="f_addr" placeholder="Full address — unit / floor / street / area" required></textarea>
+          <button type="button" id="useLoc" class="use-loc">📍 Use my current location</button>
+          <div id="pinNote" style="display:none;font-size:12px;color:#33512a;margin-top:6px;font-weight:700;"></div>
+        </div>
         <div id="meetNote" style="display:none;align-items:center;gap:8px;background:#f4f6f0;border:1px solid rgba(56,66,43,0.25);border-radius:12px;padding:12px 14px;color:#2b331d;font-size:13.5px;">📍 <span>面交 handover at <b>Vertu Resort</b> — we'll confirm the time with you on Instagram.</span></div>
       </div>
 
@@ -667,7 +681,7 @@
 
   // ---- MULTIPLE DRINK ITEMS ----
   const DRINKS=['Matcha Latte','Oreo Matcha Latte','Strawberry Matcha Latte','Coconut Matcha Cloud'];
-  const PRICES={'Matcha Latte':null,'Oreo Matcha Latte':12.50,'Strawberry Matcha Latte':13.50,'Coconut Matcha Cloud':null}; // null = price TBC
+  const PRICES={'Matcha Latte':10.50,'Oreo Matcha Latte':12.50,'Strawberry Matcha Latte':13.50,'Coconut Matcha Cloud':12.50};
   const OAT_EXTRA=1.00, FOAM_EXTRA=2.50;  // add-ons: oat milk +RM1, cheese foam 奶盖 +RM2.50
 
   function buildItem(drink,milk){
@@ -754,28 +768,87 @@
   // ---- ORDER FORM ----
   const IG_URL='https://instagram.com/reset.matcha'; // <-- change to your real Instagram
 
-  // earliest selectable date = tomorrow
+  // earliest selectable date = tomorrow (computed in LOCAL time, not UTC)
   (function(){
-    const d=new Date(); d.setDate(d.getDate()+1);
-    const min=d.toISOString().split('T')[0];
-    const el=document.getElementById('f_date');
-    if(el){el.min=min; el.value=min;}
+    const el=document.getElementById('f_date'); if(!el) return;
+    const pad=n=>String(n).padStart(2,'0');
+    const ymd=dt=>dt.getFullYear()+'-'+pad(dt.getMonth()+1)+'-'+pad(dt.getDate());
+    const t=new Date(); t.setDate(t.getDate()+1);   // tomorrow, local
+    const min=ymd(t);
+    el.min=min; el.value=min;
+    const guard=()=>{ if(el.value && el.value<min){ el.value=min; } };
+    el.addEventListener('change',guard);
+    el.addEventListener('input',guard);
+  })();
+
+  // ---- ADDRESS SEARCH + LOCATION PIN (free, OpenStreetMap) ----
+  (function(){
+    const search=document.getElementById('f_addr_search');
+    const box=document.getElementById('addrSuggest');
+    const addr=document.getElementById('f_addr');
+    const pinNote=document.getElementById('pinNote');
+    if(!search) return;
+    const clearBox=()=>{box.innerHTML='';};
+    let t;
+    search.addEventListener('input',()=>{
+      clearTimeout(t);
+      const q=search.value.trim();
+      if(q.length<3){clearBox();return;}
+      t=setTimeout(async()=>{
+        try{
+          const r=await fetch('https://nominatim.openstreetmap.org/search?format=json&countrycodes=my&addressdetails=1&limit=6&q='+encodeURIComponent(q));
+          const list=await r.json();
+          clearBox();
+          if(!list.length) return;
+          const sug=document.createElement('div'); sug.className='sug';
+          list.forEach(item=>{
+            const d=document.createElement('div'); d.textContent=item.display_name;
+            d.addEventListener('click',()=>{
+              addr.value=item.display_name;
+              window.__pin='https://maps.google.com/?q='+item.lat+','+item.lon;
+              clearBox();
+              pinNote.style.display='block';
+              pinNote.textContent='📍 Location set — a map pin will be shared with your order.';
+            });
+            sug.appendChild(d);
+          });
+          box.appendChild(sug);
+        }catch(e){clearBox();}
+      },450);
+    });
+    document.addEventListener('click',e=>{ if(!box.contains(e.target)&&e.target!==search) clearBox(); });
+
+    const useLoc=document.getElementById('useLoc');
+    if(useLoc) useLoc.addEventListener('click',()=>{
+      if(!navigator.geolocation){ alert('Location is not supported on this device — please type your address.'); return; }
+      useLoc.textContent='📍 Getting location…';
+      navigator.geolocation.getCurrentPosition(async(pos)=>{
+        const lat=pos.coords.latitude, lon=pos.coords.longitude;
+        window.__pin='https://maps.google.com/?q='+lat+','+lon;
+        try{
+          const r=await fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat='+lat+'&lon='+lon);
+          const j=await r.json();
+          if(j&&j.display_name) addr.value=j.display_name;
+        }catch(e){}
+        pinNote.style.display='block';
+        pinNote.textContent='📍 Current location captured — please add unit / floor if needed.';
+        useLoc.textContent='📍 Location captured ✓';
+      },()=>{ useLoc.textContent='📍 Use my current location'; alert('Could not get your location. Please allow location access or type your address.'); });
+    });
   })();
 
   function toggleMethod(){
     const m=document.querySelector('input[name="method"]:checked').value;
-    const lbl=document.getElementById('addrLabel');
     const inp=document.getElementById('f_addr');
     const note=document.getElementById('meetNote');
+    const dfields=document.getElementById('deliveryFields');
     if(m.indexOf('Lalamove')>-1){
-      lbl.style.display=''; inp.style.display=''; inp.required=true;
-      lbl.innerHTML='Delivery address <span class="req">*</span>';
-      inp.placeholder='Your delivery address (within Penang)';
+      dfields.style.display=''; inp.required=true;
       note.style.display='none';
     }else{
       // 面交 is fixed at Vertu Resort — no address needed
-      inp.required=false; inp.value=''; inp.style.display='none';
-      lbl.style.display='none';
+      inp.required=false; inp.value='';
+      dfields.style.display='none';
       note.style.display='flex';
     }
   }
@@ -803,7 +876,7 @@
     s+='• Total: RM '+total.toFixed(2)+(tbc?'+ (some prices TBC)':'')+' (excl. Lalamove fee)\n';
     s+='─────────────────\n';
     s+='• Receive by: '+method+'\n';
-    if(isDelivery) s+='• Delivery address: '+g('f_addr')+'\n';
+    if(isDelivery){ s+='• Delivery address: '+g('f_addr')+'\n'; if(window.__pin) s+='• Map pin: '+window.__pin+'\n'; }
     else s+='• 面交 handover: Vertu Resort\n';
     s+='• Preferred date: '+fmtDate(g('f_date'))+'\n';
     s+='─────────────────\n';

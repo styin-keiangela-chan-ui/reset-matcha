@@ -239,39 +239,29 @@
   .gallery-sec{background:rgba(40,49,30,0.55);}
   .order-sec{background:rgba(40,49,30,0.55);}
 
-  /* ===== 3D PRESSABLE BUTTONS ===== */
-  .btn,.order-btn,.submit-btn,.nav-cta,.btn-ig,.btn-copy{transition:transform .1s ease, box-shadow .1s ease, background .2s ease;}
-  .btn-primary{box-shadow:0 6px 0 #5c6544, 0 14px 22px rgba(0,0,0,0.38);}
-  .btn-primary:hover{transform:translateY(-2px);background:#aec585;box-shadow:0 8px 0 #5c6544,0 18px 26px rgba(0,0,0,0.42);}
-  .btn-primary:active{transform:translateY(4px);box-shadow:0 2px 0 #5c6544,0 6px 12px rgba(0,0,0,0.35);}
-
-  .btn-ghost{box-shadow:0 6px 0 rgba(255,255,255,0.14), 0 12px 20px rgba(0,0,0,0.3);}
-  .btn-ghost:hover{transform:translateY(-2px);box-shadow:0 8px 0 rgba(255,255,255,0.14),0 16px 24px rgba(0,0,0,0.34);}
-  .btn-ghost:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(255,255,255,0.14),0 6px 12px rgba(0,0,0,0.3);}
-
-  .order-btn{box-shadow:0 5px 0 #5c6544, 0 9px 14px rgba(0,0,0,0.3);}
-  .order-btn:hover{transform:translateY(-2px);background:var(--matcha);color:#fff;box-shadow:0 7px 0 #4f7a3f,0 12px 18px rgba(0,0,0,0.34);}
-  .order-btn:active{transform:translateY(3px);box-shadow:0 2px 0 #5c6544,0 5px 10px rgba(0,0,0,0.3);}
-
-  .submit-btn{box-shadow:0 6px 0 #5c6544, 0 14px 24px rgba(0,0,0,0.4);}
-  .submit-btn:hover{transform:translateY(-2px);background:#aec585;box-shadow:0 8px 0 #5c6544,0 18px 28px rgba(0,0,0,0.44);}
-  .submit-btn:active{transform:translateY(4px);box-shadow:0 2px 0 #5c6544,0 6px 12px rgba(0,0,0,0.35);}
-
-  .nav-cta{box-shadow:0 5px 0 #38422B, 0 8px 14px rgba(0,0,0,0.32);}
-  .nav-cta:hover{transform:translateY(-2px);box-shadow:0 7px 0 #38422B,0 12px 18px rgba(0,0,0,0.36);}
-  .nav-cta:active{transform:translateY(3px);box-shadow:0 2px 0 #38422B,0 5px 10px rgba(0,0,0,0.3);}
-
-  .btn-ig{box-shadow:0 5px 0 #ac832b, 0 9px 14px rgba(0,0,0,0.3);}
+  /* ===== FLAT BUTTONS (no 3D edge) ===== */
+  .btn,.order-btn,.submit-btn,.nav-cta,.btn-ig,.btn-copy{transition:transform .2s ease, box-shadow .2s ease, background .2s ease;}
+  .btn-primary{box-shadow:0 8px 20px rgba(0,0,0,0.22);}
+  .btn-primary:hover{transform:translateY(-2px);background:#aec585;box-shadow:0 12px 24px rgba(0,0,0,0.28);}
+  .btn-primary:active{transform:translateY(0);}
+  .btn-ghost{box-shadow:none;}
+  .btn-ghost:hover{transform:translateY(-2px);}
+  .btn-ghost:active{transform:translateY(0);}
+  .order-btn{box-shadow:0 4px 12px rgba(0,0,0,0.18);}
+  .order-btn:hover{transform:translateY(-2px);background:var(--matcha);color:#fff;}
+  .order-btn:active{transform:translateY(0);}
+  .submit-btn{box-shadow:0 8px 20px rgba(0,0,0,0.24);}
+  .submit-btn:hover{transform:translateY(-2px);background:#aec585;}
+  .submit-btn:active{transform:translateY(0);}
+  .nav-cta{box-shadow:0 4px 12px rgba(0,0,0,0.2);}
+  .nav-cta:hover{transform:translateY(-2px);}
+  .nav-cta:active{transform:translateY(0);}
+  .btn-ig{box-shadow:0 4px 12px rgba(0,0,0,0.18);}
   .btn-ig:hover{transform:translateY(-2px);}
-  .btn-ig:active{transform:translateY(3px);box-shadow:0 2px 0 #ac832b,0 5px 10px rgba(0,0,0,0.3);}
-  .btn-copy:active{transform:translateY(2px);}
-
-  .cta .btn-primary{box-shadow:0 6px 0 #cdae5f, 0 14px 22px rgba(0,0,0,0.3);}
-  .cta .btn-primary:hover{background:var(--gold);color:#fff;box-shadow:0 8px 0 #b8933f,0 18px 26px rgba(0,0,0,0.34);}
-  .cta .btn-primary:active{transform:translateY(4px);box-shadow:0 2px 0 #b8933f,0 6px 12px rgba(0,0,0,0.3);}
-
-  /* pills get a little press too */
-  .pill:active{transform:translateY(2px);}
+  .btn-ig:active{transform:translateY(0);}
+  .cta .btn-primary{box-shadow:0 8px 20px rgba(0,0,0,0.18);}
+  .cta .btn-primary:hover{background:var(--gold);color:#fff;transform:translateY(-2px);}
+  .cta .btn-primary:active{transform:translateY(0);}
 
   /* ===== OUR MATCHA ===== */
   .matcha-intro{max-width:660px;margin:0 auto 44px;text-align:center;color:rgba(233,238,222,0.75);line-height:1.75;font-size:16px;}
@@ -378,7 +368,7 @@
           <p class="desc">Ceremonial-grade matcha whisked smooth with your choice of milk. Hot or iced.</p>
           <div class="milk">
             <label><input type="radio" name="m1" value="Low-fat Milk" checked><span>Low-fat Milk</span></label>
-            <label><input type="radio" name="m1" value="Oat Milk"><span>Oat Milk +RM1</span></label>
+            <label><input type="radio" name="m1" value="Oat Milk"><span>Oat Milk</span></label>
           </div>
           <div class="card-foot">
             <div class="price">RM 9.00<small> / cup</small></div>
@@ -397,7 +387,7 @@
           <p class="desc">Chilled over ice and topped with a soft milk layer — refreshing and smooth for hot days.</p>
           <div class="milk">
             <label><input type="radio" name="m2" value="Low-fat Milk" checked><span>Low-fat Milk</span></label>
-            <label><input type="radio" name="m2" value="Oat Milk"><span>Oat Milk +RM1</span></label>
+            <label><input type="radio" name="m2" value="Oat Milk"><span>Oat Milk</span></label>
           </div>
           <div class="card-foot">
             <div class="price">RM 9.00<small> / cup</small></div>
@@ -416,7 +406,7 @@
           <p class="desc">Roasted hojicha with a warm, toasty flavour, whisked with your choice of milk. Hot or iced.</p>
           <div class="milk">
             <label><input type="radio" name="m3" value="Low-fat Milk" checked><span>Low-fat Milk</span></label>
-            <label><input type="radio" name="m3" value="Oat Milk"><span>Oat Milk +RM1</span></label>
+            <label><input type="radio" name="m3" value="Oat Milk"><span>Oat Milk</span></label>
           </div>
           <div class="card-foot">
             <div class="price">RM 9.00<small> / cup</small></div>
@@ -535,7 +525,7 @@
           <select id="f_milk" required>
             <option value="">Choose milk…</option>
             <option value="Low-fat Milk">Low-fat Milk</option>
-            <option value="Oat Milk">Oat Milk (+RM1)</option>
+            <option value="Oat Milk">Oat Milk</option>
           </select>
         </div>
       </div>
@@ -633,6 +623,17 @@
     document.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));
     p.classList.add('active');
   }));
+
+  // menu card price updates with milk choice (oat milk = RM10.00)
+  document.querySelectorAll('.menu-grid .card').forEach(card=>{
+    card.querySelectorAll('.milk input').forEach(inp=>{
+      inp.addEventListener('change',()=>{
+        const oat=inp.value.indexOf('Oat')>-1;
+        const priceEl=card.querySelector('.price');
+        if(priceEl) priceEl.innerHTML='RM '+(oat?'10.00':'9.00')+'<small> / cup</small>';
+      });
+    });
+  });
 
   function setOrder(drink,group){
     const milk=document.querySelector(`input[name="${group}"]:checked`).value;

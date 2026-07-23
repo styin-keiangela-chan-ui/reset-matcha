@@ -369,7 +369,7 @@
         <div class="hero-stats">
           <div><b>Gen Z</b><span>Homemade with heart</span></div>
           <div><b>Fresh</b><span>Made to order</span></div>
-          <div><b>Batu Kawan</b><span>Delivery area</span></div>
+          <div><b>Penang</b><span>Delivery area</span></div>
         </div>
       </div>
     </div>
@@ -537,15 +537,15 @@
       <div class="dcard">
         <div class="icon">🛵</div>
         <h3>Lalamove Delivery</h3>
-        <p>We arrange a Lalamove rider to bring your order to you within Batu Kawan. Delivery fee is paid by the customer via the Lalamove app.</p>
+        <p>We arrange a Lalamove rider to bring your order to you anywhere within Penang. Delivery fee is paid by the customer via the Lalamove app.</p>
       </div>
       <div class="dcard">
         <div class="icon">🤝</div>
         <h3>面交 Meetup</h3>
-        <p>Prefer to meet in person? We can arrange a convenient meetup spot around Batu Kawan — just tell us your preferred time and place in a DM.</p>
+        <p>Prefer to meet in person? We do 面交 handover at <b>Vertu Resort</b> only — just tell us your preferred time and we'll confirm on Instagram.</p>
       </div>
     </div>
-    <div class="area"><span>📍 Delivery &amp; meetup limited to the Batu Kawan area only</span></div>
+    <div class="area"><span>📍 Lalamove delivery within Penang · 面交 handover at Vertu Resort</span></div>
   </div>
 </section>
 
@@ -578,17 +578,18 @@
       <div class="methods">
         <label class="method">
           <input type="radio" name="method" value="Lalamove Delivery" checked onchange="toggleMethod()">
-          <span class="box"><span class="mi">🛵</span><b>Lalamove Delivery</b><small>Within Batu Kawan · fee paid by you</small></span>
+          <span class="box"><span class="mi">🛵</span><b>Lalamove Delivery</b><small>Anywhere in Penang · fee paid by you</small></span>
         </label>
         <label class="method">
           <input type="radio" name="method" value="面交 Face-to-face" onchange="toggleMethod()">
-          <span class="box"><span class="mi">🤝</span><b>面交 Meetup</b><small>Meet around Batu Kawan</small></span>
+          <span class="box"><span class="mi">🤝</span><b>面交 Meetup</b><small>At Vertu Resort only</small></span>
         </label>
       </div>
 
       <div class="field full" id="addrField" style="margin-bottom:18px;">
         <label id="addrLabel">Delivery address <span class="req">*</span></label>
-        <textarea id="f_addr" placeholder="Your delivery address in Batu Kawan" required></textarea>
+        <textarea id="f_addr" placeholder="Your delivery address (within Penang)" required></textarea>
+        <div id="meetNote" style="display:none;align-items:center;gap:8px;background:#f4f6f0;border:1px solid rgba(56,66,43,0.25);border-radius:12px;padding:12px 14px;color:#2b331d;font-size:13.5px;">📍 <span>面交 handover at <b>Vertu Resort</b> — we'll confirm the time with you on Instagram.</span></div>
       </div>
 
       <div class="frow">
@@ -735,12 +736,17 @@
     const m=document.querySelector('input[name="method"]:checked').value;
     const lbl=document.getElementById('addrLabel');
     const inp=document.getElementById('f_addr');
+    const note=document.getElementById('meetNote');
     if(m.indexOf('Lalamove')>-1){
+      lbl.style.display=''; inp.style.display=''; inp.required=true;
       lbl.innerHTML='Delivery address <span class="req">*</span>';
-      inp.placeholder='Your delivery address in Batu Kawan';
+      inp.placeholder='Your delivery address (within Penang)';
+      note.style.display='none';
     }else{
-      lbl.innerHTML='Preferred meetup area <span class="req">*</span>';
-      inp.placeholder='e.g. near Batu Kawan mall / your preferred spot';
+      // 面交 is fixed at Vertu Resort — no address needed
+      inp.required=false; inp.value=''; inp.style.display='none';
+      lbl.style.display='none';
+      note.style.display='flex';
     }
   }
 
@@ -753,7 +759,7 @@
   function buildSummary(){
     const g=id=>{const el=document.getElementById(id);return el?el.value.trim():'';};
     const method=document.querySelector('input[name="method"]:checked').value;
-    const addrLabel=method.indexOf('Lalamove')>-1?'Delivery address':'Preferred meetup area';
+    const isDelivery=method.indexOf('Lalamove')>-1;
     let s='🍵 reset.matcha — New Order\n─────────────────\n';
     let total=0;
     itemsData().forEach(i=>{
@@ -765,7 +771,8 @@
     s+='• Total: RM '+total.toFixed(2)+' (excl. Lalamove fee)\n';
     s+='─────────────────\n';
     s+='• Receive by: '+method+'\n';
-    s+='• '+addrLabel+': '+g('f_addr')+'\n';
+    if(isDelivery) s+='• Delivery address: '+g('f_addr')+'\n';
+    else s+='• 面交 handover: Vertu Resort\n';
     s+='• Preferred date: '+fmtDate(g('f_date'))+'\n';
     s+='─────────────────\n';
     s+='• Name: '+g('f_name')+'\n';

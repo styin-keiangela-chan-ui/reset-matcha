@@ -378,10 +378,10 @@
           <p class="desc">Ceremonial-grade matcha whisked smooth with your choice of milk. Hot or iced.</p>
           <div class="milk">
             <label><input type="radio" name="m1" value="Low-fat Milk" checked><span>Low-fat Milk</span></label>
-            <label><input type="radio" name="m1" value="Oat Milk"><span>Oat Milk</span></label>
+            <label><input type="radio" name="m1" value="Oat Milk"><span>Oat Milk +RM1</span></label>
           </div>
           <div class="card-foot">
-            <div class="price">RM –.–<small> TBC</small></div>
+            <div class="price">RM 9.00<small> / cup</small></div>
             <a href="#order" class="order-btn" onclick="setOrder('Matcha Latte','m1')">Order</a>
           </div>
         </div>
@@ -397,10 +397,10 @@
           <p class="desc">Chilled over ice and topped with a soft milk layer — refreshing and smooth for hot days.</p>
           <div class="milk">
             <label><input type="radio" name="m2" value="Low-fat Milk" checked><span>Low-fat Milk</span></label>
-            <label><input type="radio" name="m2" value="Oat Milk"><span>Oat Milk</span></label>
+            <label><input type="radio" name="m2" value="Oat Milk"><span>Oat Milk +RM1</span></label>
           </div>
           <div class="card-foot">
-            <div class="price">RM –.–<small> TBC</small></div>
+            <div class="price">RM 9.00<small> / cup</small></div>
             <a href="#order" class="order-btn" onclick="setOrder('Iced Matcha Latte','m2')">Order</a>
           </div>
         </div>
@@ -416,10 +416,10 @@
           <p class="desc">Roasted hojicha with a warm, toasty flavour, whisked with your choice of milk. Hot or iced.</p>
           <div class="milk">
             <label><input type="radio" name="m3" value="Low-fat Milk" checked><span>Low-fat Milk</span></label>
-            <label><input type="radio" name="m3" value="Oat Milk"><span>Oat Milk</span></label>
+            <label><input type="radio" name="m3" value="Oat Milk"><span>Oat Milk +RM1</span></label>
           </div>
           <div class="card-foot">
-            <div class="price">RM –.–<small> TBC</small></div>
+            <div class="price">RM 9.00<small> / cup</small></div>
             <a href="#order" class="order-btn" onclick="setOrder('Hojicha Latte','m3')">Order</a>
           </div>
         </div>
@@ -534,8 +534,8 @@
           <label>Milk <span class="req">*</span></label>
           <select id="f_milk" required>
             <option value="">Choose milk…</option>
-            <option>Low-fat Milk</option>
-            <option>Oat Milk</option>
+            <option value="Low-fat Milk">Low-fat Milk</option>
+            <option value="Oat Milk">Oat Milk (+RM1)</option>
           </select>
         </div>
       </div>
@@ -548,6 +548,7 @@
         <div class="field">
           <label>Preferred date <span class="req">*</span></label>
           <input type="date" id="f_date" required>
+          <span style="font-size:11.5px;color:var(--matcha-bright);">🍵 Made fresh — tomorrow onwards</span>
         </div>
       </div>
 
@@ -586,7 +587,15 @@
 
       <div class="confirm-note" style="margin-top:4px;">
         <span>ℹ️</span>
-        <div><b>Time is confirmed after ordering.</b> We'll reply on Instagram to confirm your exact delivery / 面交 handover time before we whisk your order. Earliest date is tomorrow. 🍃</div>
+        <div><b>Every cup is homemade &amp; whisked fresh to order.</b> To keep the quality perfect, we don't do same-day orders — please book from <b>tomorrow onwards</b>. We'll reply on Instagram to confirm your exact delivery / 面交 handover time before we whisk your order. 🍃</div>
+      </div>
+
+      <div class="order-total" style="display:flex;justify-content:space-between;align-items:center;background:rgba(159,184,115,0.14);border:1px solid rgba(159,184,115,0.32);border-radius:14px;padding:16px 20px;margin-bottom:18px;">
+        <span style="font-family:'Poppins';font-weight:700;color:#eef1e6;font-size:15px;">Total</span>
+        <span style="text-align:right;">
+          <span id="orderTotal" style="font-family:'Poppins';font-weight:800;font-size:24px;color:var(--matcha-bright);">RM 9.00</span>
+          <div style="font-size:11px;color:rgba(233,238,222,0.5);">excludes Lalamove delivery fee</div>
+        </span>
       </div>
 
       <button type="submit" class="submit-btn">📩 Send order &amp; open Instagram</button>
@@ -632,7 +641,23 @@
     const ds=document.getElementById('f_drink');
     if([...ds.options].some(o=>o.value===drink)) ds.value=drink;
     document.getElementById('f_milk').value=milk;
+    updateTotal();
   }
+
+  // ---- LIVE TOTAL ----
+  const PRICE=9, OAT_EXTRA=1;   // RM per cup; oat milk surcharge
+  function perCup(milk){ return PRICE + ((milk||'').indexOf('Oat')>-1 ? OAT_EXTRA : 0); }
+  function orderQty(){ return Math.max(1, parseInt(document.getElementById('f_qty').value)||1); }
+  function updateTotal(){
+    const milk=document.getElementById('f_milk').value;
+    const total=(perCup(milk)*orderQty()).toFixed(2);
+    document.getElementById('orderTotal').textContent='RM '+total;
+  }
+  ['f_drink','f_milk','f_qty'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.addEventListener('change',updateTotal);el.addEventListener('input',updateTotal);}
+  });
+  updateTotal();
 
   // ---- ORDER FORM ----
   const IG_URL='https://instagram.com/reset.matcha'; // <-- change to your real Instagram
@@ -674,6 +699,7 @@
     s+='• Milk: '+g('f_milk')+'\n';
     s+='• Quantity: '+g('f_qty')+'\n';
     if(g('f_notes')) s+='• Extra / notes: '+g('f_notes')+'\n';
+    s+='• Total: RM '+(perCup(g('f_milk'))*orderQty()).toFixed(2)+' (excl. Lalamove fee)\n';
     s+='─────────────────\n';
     s+='• Receive by: '+method+'\n';
     s+='• '+addrLabel+': '+g('f_addr')+'\n';

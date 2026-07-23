@@ -271,13 +271,16 @@
   .item .it-remove:hover{background:#7a3b34;}
   .add-item{width:100%;background:transparent;border:1.5px dashed var(--matcha);color:var(--matcha-bright);border-radius:14px;padding:12px;font-family:'Poppins';font-weight:700;font-size:14px;cursor:pointer;transition:background .2s;}
   .add-item:hover{background:rgba(159,184,115,0.12);}
+  /* order form stacks early so it never looks cramped */
+  @media(max-width:760px){
+    .frow{grid-template-columns:1fr;}
+    .item .irow{grid-template-columns:2fr 1fr;gap:10px;}
+    .item .irow .field:first-child{grid-column:1 / -1;}
+  }
   @media(max-width:600px){
     .wrap{padding:0 16px;}
     .order-form{padding:22px 16px;}
-    .frow{grid-template-columns:1fr;}
     .item{padding:12px;}
-    .item .irow{grid-template-columns:1fr 1fr;gap:10px;}
-    .item .irow .field:first-child{grid-column:1 / -1;}
     .methods{grid-template-columns:1fr;}
     .hero-inner{padding:34px 22px;}
     .hero-stats{gap:14px 22px;flex-wrap:wrap;}

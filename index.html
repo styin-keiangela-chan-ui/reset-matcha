@@ -682,7 +682,7 @@
   // ---- MULTIPLE DRINK ITEMS ----
   const DRINKS=['Matcha Latte','Oreo Matcha Latte','Strawberry Matcha Latte','Coconut Matcha Cloud'];
   const PRICES={'Matcha Latte':11.90,'Oreo Matcha Latte':12.50,'Strawberry Matcha Latte':13.50,'Coconut Matcha Cloud':12.50};
-  const OAT_EXTRA=1.00, FOAM_EXTRA=2.50;  // add-ons: oat milk +RM1, cheese foam 奶盖 +RM2.50
+  const OAT_EXTRA=1.00, FOAM_EXTRA=2.00;  // add-ons: oat milk +RM1, cheese foam 奶盖 +RM2
 
   function buildItem(drink,milk){
     const wrap=document.createElement('div');
@@ -694,13 +694,14 @@
     wrap.innerHTML='<button type="button" class="it-remove" title="Remove">×</button>'+
       '<div class="irow">'+
         '<div class="field"><label>Drink <span class="req">*</span></label><select class="it-drink" required>'+dOpts+'</select></div>'+
-        '<div class="field"><label>Temp</label><select class="it-temp"><option>Iced</option><option>Hot</option></select></div>'+
+        '<div class="field"><label>Temp</label><select class="it-temp"><option>Iced</option><option>Hot</option></select><span class="temp-note" style="display:none;font-size:10.5px;color:#8a5a12;margin-top:5px;line-height:1.35;">❄️ Iced only — not suitable for hot. You can note "less ice" in Special requests.</span></div>'+
         '<div class="field"><label>Milk <span class="req">*</span></label><select class="it-milk" required>'+mOpts+'</select></div>'+
         '<div class="field"><label>Qty <span class="req">*</span></label><input type="number" class="it-qty" min="1" value="1" required></div>'+
       '</div>'+
-      '<label class="cheese"><input type="checkbox" class="it-cheese"> ＋ Add Cheese Foam 奶盖 (+RM2.50)</label>';
+      '<label class="cheese"><input type="checkbox" class="it-cheese"> ＋ Add Cheese Foam 奶盖 (+RM2)</label>';
     const drinkSel=wrap.querySelector('.it-drink');
     const tempSel=wrap.querySelector('.it-temp');
+    const tempNote=wrap.querySelector('.temp-note');
     const cheeseLbl=wrap.querySelector('.cheese');
     const cheeseCb=wrap.querySelector('.it-cheese');
     function syncOptions(){
@@ -708,8 +709,10 @@
       const cheeseOK = v && v!=='Coconut Matcha Cloud';   // cheese foam not for Coconut Cloud
       cheeseLbl.style.display = cheeseOK ? 'flex' : 'none';
       if(!cheeseOK) cheeseCb.checked=false;
-      if(v==='Matcha Latte'){ tempSel.disabled=false; }   // hot only for Matcha Latte
-      else { tempSel.value='Iced'; tempSel.disabled=(v!==''); }
+      // Only Matcha Latte can be hot; the rest are iced-only
+      if(v==='Matcha Latte'){ tempSel.disabled=false; tempNote.style.display='none'; }
+      else if(v){ tempSel.value='Iced'; tempSel.disabled=true; tempNote.style.display='block'; }
+      else { tempSel.value='Iced'; tempSel.disabled=false; tempNote.style.display='none'; }
       updateTotal();
     }
     drinkSel.addEventListener('change',syncOptions);
